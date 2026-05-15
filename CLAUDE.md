@@ -157,7 +157,7 @@ Unified collection for OSS, Works, and Hobby projects, discriminated by `categor
 **Category routing:**
 - `oss` → listed on `/oss/`
 - `work` → listed on `/works/`
-- `hobby` → listed on `/blog/` sidebar or `/about` (not its own section)
+- `hobby` → listed on `/about/` under "Side projects · 寄り道"
 
 ### `blog` collection
 

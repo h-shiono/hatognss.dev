@@ -1,5 +1,13 @@
 ---
+import { getCollection } from 'astro:content';
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+
+const hobbies = (await getCollection('projects', (e) => e.data.category === 'hobby'))
+  .sort(
+    (a, b) =>
+      (b.data.updatedDate ?? b.data.startDate).getTime() -
+      (a.data.updatedDate ?? a.data.startDate).getTime(),
+  );
 ---
 <ArticleLayout title="About" description="About hato.GNSS — independent GNSS researcher.">
   <h1>About</h1>
@@ -19,4 +27,99 @@ import ArticleLayout from '../layouts/ArticleLayout.astro';
   <p>
     Bio copy to be expanded.
   </p>
+
+  {hobbies.length > 0 && (
+    <section class="side-projects" aria-labelledby="side-projects-heading">
+      <h2 id="side-projects-heading" class="section-label">
+        <span lang="en">Side projects</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span lang="ja">寄り道</span>
+      </h2>
+      <ul class="project-list">
+        {hobbies.map((p) => (
+          <li class="project">
+            <h3 class="project-title">{p.data.title}</h3>
+            <p class="project-summary">{p.data.summary}</p>
+            {(p.data.repo || p.data.demo || p.data.docs) && (
+              <ul class="project-links">
+                {p.data.repo && <li><a href={p.data.repo} rel="noopener" target="_blank">Repo →</a></li>}
+                {p.data.demo && <li><a href={p.data.demo} rel="noopener" target="_blank">Site →</a></li>}
+                {p.data.docs && <li><a href={p.data.docs} rel="noopener" target="_blank">Docs →</a></li>}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </ArticleLayout>
+
+<style>
+  .side-projects {
+    margin-top: 3rem;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--color-border);
+  }
+  .section-label .sep {
+    color: var(--color-text-tertiary);
+    margin: 0 4px;
+  }
+  .project-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .project {
+    margin: 0;
+  }
+  .project-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    margin: 0 0 0.25rem 0;
+  }
+  .project-summary {
+    font-family: var(--font-display);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    margin: 0 0 0.5rem 0;
+  }
+  .project-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .project-links li {
+    margin: 0;
+  }
+  .project-links a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+  .project-links a:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+</style>
