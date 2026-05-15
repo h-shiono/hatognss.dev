@@ -7,12 +7,15 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "pnpm run build && wrangler dev",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "deploy": "pnpm run build && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/cloudflare": "12",
     "@astrojs/mdx": "^4.0.0",
     "@astrojs/react": "^4.0.0",
     "@astrojs/rss": "^4.0.0",
@@ -35,7 +38,8 @@
     "@types/geojson": "^7946.0.16",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "@types/topojson-client": "^3.1.5"
+    "@types/topojson-client": "^3.1.5",
+    "wrangler": "^4.91.0"
   },
   "packageManager": "pnpm@9.0.0"
 }

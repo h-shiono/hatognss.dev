@@ -48,3 +48,7 @@ coverage/
 
 # Cloudflare / deployment
 .wrangler/
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
