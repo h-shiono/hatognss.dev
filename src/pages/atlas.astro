@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/layout/PageHeader.astro';
+import SectionLabel from '../components/layout/SectionLabel.astro';
 import AtlasMap from '../components/atlas/AtlasMap';
 import type { AtlasMarker } from '../components/atlas/AtlasMap';
 import AtlasList from '../components/atlas/AtlasList.astro';
@@ -75,19 +77,13 @@ const yearLabel =
   description="A geographic atlas of talks given by hato.GNSS."
 >
   <article class="atlas-page">
-    <header class="atlas-header">
-      <h1 class="atlas-title">
-        Talks <span class="atlas-sep">·</span> Atlas
-        {yearLabel && <span class="atlas-year">/ {yearLabel}</span>}
-      </h1>
-    </header>
+    <PageHeader
+      title={`Atlas${yearLabel ? ` / ${yearLabel}` : ''}`}
+      description="Talks given, plotted at their physical venues."
+    />
 
     <section class="atlas-section">
-      <h2 class="atlas-section-heading">
-        <span lang="ja">地図</span>
-        <span class="atlas-sep">·</span>
-        <span lang="en">Map</span>
-      </h2>
+      <SectionLabel as="h2" en="Map" ja="地図" />
       <div class="atlas-map-wrapper">
         <AtlasMap
           client:visible
@@ -101,64 +97,16 @@ const yearLabel =
     </section>
 
     <section class="atlas-section">
-      <h2 class="atlas-section-heading">
-        <span lang="ja">一覧</span>
-        <span class="atlas-sep">·</span>
-        <span lang="en">List</span>
-      </h2>
+      <SectionLabel as="h2" en="List" ja="一覧" />
       <AtlasList talks={allTalks} />
     </section>
   </article>
 </BaseLayout>
 
 <style>
-  .atlas-page {
-    max-width: 920px;
-    margin: 0 auto;
-    padding: 48px 24px 96px;
-  }
-
-  .atlas-header {
-    margin-bottom: 48px;
-  }
-
-  .atlas-title {
-    font-size: 28px;
-    font-weight: 500;
-    margin: 0;
-    color: var(--color-foreground);
-    letter-spacing: -0.01em;
-  }
-
-  .atlas-year {
-    font-family: var(--font-mono);
-    font-weight: 400;
-    color: var(--color-foreground-muted);
-    margin-left: 8px;
-  }
-
-  .atlas-sep {
-    color: var(--color-foreground-muted);
-    margin: 0 6px;
-    font-weight: 400;
-  }
-
   .atlas-section {
-    margin-top: 48px;
+    margin-top: 3rem;
   }
-
-  .atlas-section-heading {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--color-foreground-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin: 0 0 16px 0;
-    padding-bottom: 8px;
-    border-bottom: 0.5px solid var(--color-border-tertiary);
-  }
-
   .atlas-map-wrapper {
     margin: 0;
   }

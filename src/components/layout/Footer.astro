@@ -1,8 +1,79 @@
 ---
 import { SITE, SOCIAL } from '../../lib/constants';
+
 const year = new Date().getFullYear();
+
+const links = [
+  { href: SOCIAL.github, label: 'GitHub' },
+  { href: SOCIAL.zenn, label: 'Zenn' },
+  { href: SOCIAL.x, label: 'X' },
+  { href: SOCIAL.researchgate, label: 'ResearchGate' },
+].filter((l) => l.href);
 ---
-<footer>
-  <small>© {year} {SITE.author}</small>
-  {SOCIAL.email && <a href={`mailto:${SOCIAL.email}`}>Email</a>}
+<footer class="footer">
+  <span class="identity">{SITE.title} <span class="sep">·</span> {year}</span>
+  <ul class="links" aria-label="Social links">
+    <li><a href="/about/">About</a></li>
+    {links.map(({ href, label }, i) => (
+      <li>
+        <span class="sep" aria-hidden="true">·</span>
+        <a href={href} rel="me noopener" target="_blank">{label}</a>
+      </li>
+    ))}
+    {SOCIAL.email && (
+      <li>
+        <span class="sep" aria-hidden="true">·</span>
+        <a href={`mailto:${SOCIAL.email}`}>Email</a>
+      </li>
+    )}
+  </ul>
 </footer>
+
+<style>
+  .footer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 5rem;
+    padding-top: 18px;
+    border-top: 0.5px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+  }
+
+  .identity {
+    letter-spacing: 0.04em;
+  }
+
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .links li {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .links a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease-out;
+  }
+  .links a:hover {
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+
+  .sep {
+    color: var(--color-text-tertiary);
+    margin: 0 2px;
+  }
+</style>

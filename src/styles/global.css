@@ -1,45 +1,92 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 /*
- * Almanac theme tokens. See docs/atlas-design.md §6 for aesthetic direction.
+ * Almanac design tokens.
  *
- * - Warm off-white in light mode, deep ink in dark mode.
- * - Single muted accent: antique brass.
- * - Numerals + coordinates render in --font-mono.
+ * Canonical names follow docs/site-layout-design.md §6:
+ *   --color-bg, --color-text-primary, --color-text-secondary, --color-text-tertiary,
+ *   --color-border, --color-accent
  *
- * Light is the @theme default. [data-theme="dark"] overrides on the same names
- * so utilities like `text-accent` or `bg-background-secondary` auto-switch.
+ * Atlas was implemented earlier against legacy names (--color-background,
+ * --color-foreground, --color-background-secondary, --color-border-tertiary,
+ * --color-foreground-muted). Those are kept as aliases so atlas.astro and
+ * AtlasList.astro continue to render unchanged.
+ *
+ * Light is the @theme default. [data-theme="dark"] is overridden by the
+ * prefers-color-scheme media query below.
  */
 @theme {
+  --color-bg: #FAF7F0;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B6B6B;
+  --color-text-tertiary: #9A9A9A;
+  --color-border: #E0DCD0;
   --color-accent: #854F0B;
-  --color-background: #FAF7F2;
+
+  /* Legacy aliases — referenced by atlas components. Same values. */
+  --color-background: var(--color-bg);
   --color-background-secondary: #F0EAE0;
-  --color-border-tertiary: #D9CFC0;
-  --color-foreground: #1A1A1A;
-  --color-foreground-muted: #6B6B6B;
+  --color-foreground: var(--color-text-primary);
+  --color-foreground-muted: var(--color-text-secondary);
+  --color-border-tertiary: var(--color-border);
 
-  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-}
-
-[data-theme="dark"] {
-  --color-accent: #EF9F27;
-  --color-background: #14110D;
-  --color-background-secondary: #1F1A14;
-  --color-border-tertiary: #3A3128;
-  --color-foreground: #F5F0E8;
-  --color-foreground-muted: #A39988;
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
-[data-theme="dark"] {
-  color-scheme: dark;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #14130F;
+    --color-text-primary: #E8E4DA;
+    --color-text-secondary: #9B9890;
+    --color-text-tertiary: #6B6863;
+    --color-border: #2A2925;
+    --color-accent: #EF9F27;
+
+    --color-background: var(--color-bg);
+    --color-background-secondary: #1F1A14;
+    --color-foreground: var(--color-text-primary);
+    --color-foreground-muted: var(--color-text-secondary);
+    --color-border-tertiary: var(--color-border);
+
+    color-scheme: dark;
+  }
 }
 
-html,
+/* Base typography. */
+html {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
 }

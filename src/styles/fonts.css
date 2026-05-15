@@ -1,7 +1,8 @@
 /*
- * Web font declarations.
- *
- * Per CLAUDE.md §7, the typography pairing (display + body) is TBD and must
- * be confirmed with the user before installing. Add @font-face blocks here
- * once a pairing is chosen.
+ * Self-hosted web fonts. Loaded once via BaseLayout (through global.css).
+ * Pairing: Fraunces (display + body) + JetBrains Mono (mono/labels).
  */
+@import '@fontsource-variable/fraunces/wght.css';
+@import '@fontsource-variable/fraunces/wght-italic.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';

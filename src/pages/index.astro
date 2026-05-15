@@ -1,61 +1,267 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/hero/Hero.astro';
-import Section from '../components/ui/Section.astro';
-import PublicationItem from '../components/cards/PublicationItem.astro';
-import TalkItem from '../components/cards/TalkItem.astro';
-import ProjectCard from '../components/cards/ProjectCard.astro';
-import BlogCard from '../components/cards/BlogCard.astro';
+import SectionLabel from '../components/layout/SectionLabel.astro';
 
-const featured = {
-  publications: (await getCollection('publications', (e) => e.data.featured))
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
-  talks: (await getCollection('talks', (e) => e.data.featured))
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
-  oss: (await getCollection('projects', (e) => e.data.featured && e.data.category === 'oss')),
-  works: (await getCollection('projects', (e) => e.data.featured && e.data.category === 'work')),
-  blog: (await getCollection('blog', (e) => e.data.featured && !e.data.draft))
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+type AnyEntry =
+  | { kind: 'talk'; slug: string; date: Date; title: string; href: string }
+  | { kind: 'paper'; slug: string; date: Date; title: string; href: string }
+  | { kind: 'oss'; slug: string; date: Date; title: string; href: string };
+
+const talks = await getCollection('talks');
+const publications = await getCollection('publications');
+const ossProjects = await getCollection('projects', (e) => e.data.category === 'oss');
+
+const latest: AnyEntry[] = [
+  ...talks.map((t): AnyEntry => ({
+    kind: 'talk',
+    slug: t.slug,
+    date: t.data.date,
+    title: t.data.title,
+    href: `/research/talks/${t.slug}/`,
+  })),
+  ...publications.map((p): AnyEntry => ({
+    kind: 'paper',
+    slug: p.slug,
+    date: p.data.date,
+    title: p.data.title,
+    href: `/research/publications/${p.slug}/`,
+  })),
+  ...ossProjects.map((o): AnyEntry => ({
+    kind: 'oss',
+    slug: o.slug,
+    date: o.data.updatedDate ?? o.data.startDate,
+    title: o.data.title,
+    href: `/oss/${o.slug}/`,
+  })),
+]
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .slice(0, 5);
+
+const dateFmt = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'short',
+});
+
+const kindLabel: Record<AnyEntry['kind'], string> = {
+  talk: 'TALK',
+  paper: 'PAPER',
+  oss: 'OSS',
 };
+
+const sections = [
+  {
+    href: '/research/',
+    eyebrow: 'Research',
+    title: 'Publications & talks',
+    desc: 'GNSS positioning research — papers and conference talks.',
+  },
+  {
+    href: '/oss/',
+    eyebrow: 'OSS',
+    title: 'Open source',
+    desc: 'Libraries and tools maintained as personal open-source work.',
+  },
+  {
+    href: '/atlas/',
+    eyebrow: 'Atlas',
+    title: 'Atlas of talks',
+    desc: 'A geographic record of where talks have been given.',
+  },
+  {
+    href: '/blog/',
+    eyebrow: 'Blog',
+    title: 'Notes',
+    desc: 'Short essays on positioning, tooling, and travel.',
+  },
+];
 ---
-<BaseLayout>
-  <Hero />
+<BaseLayout description="Independent GNSS researcher · OSS maintainer.">
+  <section class="hero">
+    <p class="hero-role">INDEPENDENT GNSS RESEARCHER · OSS MAINTAINER</p>
+    <h1 class="hero-tagline" lang="ja">
+      測位の現場を、静かに記録する。
+    </h1>
+    <p class="hero-tagline-en" lang="en">
+      <em>A quiet record of GNSS positioning — papers, code, and places.</em>
+    </p>
+  </section>
 
-  <Section title="Research" eyebrow="Publications & Talks">
-    {featured.publications.map((e) => <PublicationItem entry={e} />)}
-    {featured.talks.map((e) => <TalkItem entry={e} />)}
-    <p class="see-atlas"><a href="/atlas/">see atlas →</a></p>
-    <a href="/research/">All research →</a>
-  </Section>
+  <section class="latest">
+    <SectionLabel as="h2" en="Latest" ja="最近の記録" />
+    <ul class="latest-list">
+      {latest.map((e) => (
+        <li>
+          <a href={e.href} class="latest-row">
+            <span class="latest-date">{dateFmt.format(e.date)}</span>
+            <span class="latest-kind">{kindLabel[e.kind]}</span>
+            <span class="latest-title">{e.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
 
-  <Section title="OSS" eyebrow="Open source">
-    {featured.oss.map((e) => <ProjectCard entry={e} />)}
-    <a href="/oss/">All OSS →</a>
-  </Section>
-
-  <Section title="Works" eyebrow="Services & applications">
-    {featured.works.map((e) => <ProjectCard entry={e} />)}
-    <a href="/works/">All works →</a>
-  </Section>
-
-  <Section title="Blog" eyebrow="Writing">
-    {featured.blog.map((e) => <BlogCard entry={e} />)}
-    <a href="/blog/">All posts →</a>
-  </Section>
+  <section class="sections-toc">
+    <SectionLabel as="h2" en="Sections" ja="章立て" />
+    <div class="toc-grid">
+      {sections.map((s) => (
+        <a href={s.href} class="toc-card">
+          <span class="toc-eyebrow">{s.eyebrow}</span>
+          <span class="toc-title">{s.title}</span>
+          <span class="toc-desc">{s.desc}</span>
+          <span class="toc-cta">Browse →</span>
+        </a>
+      ))}
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .see-atlas {
-    margin: 8px 0;
+  .hero {
+    margin: 2.5rem 0 3rem 0;
   }
-  .see-atlas a {
+  .hero-role {
     font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--color-foreground-muted);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0 0 1.25rem 0;
+  }
+  .hero-tagline {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    margin: 0 0 0.75rem 0;
+    color: var(--color-text-primary);
+  }
+  .hero-tagline-en {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+  @media (max-width: 640px) {
+    .hero-tagline {
+      font-size: 26px;
+    }
+  }
+
+  .latest {
+    margin: 3rem 0;
+  }
+  .latest-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .latest-row {
+    display: grid;
+    grid-template-columns: 90px 70px 1fr;
+    gap: 16px;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--color-border);
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease-out;
+  }
+  .latest-row:hover {
     text-decoration: none;
   }
-  .see-atlas a:hover {
+  .latest-row:hover .latest-title {
     color: var(--color-accent);
+  }
+  .latest-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+  .latest-kind {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    color: var(--color-accent);
+  }
+  .latest-title {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    transition: color 0.15s ease-out;
+  }
+  @media (max-width: 640px) {
+    .latest-row {
+      grid-template-columns: 76px 56px 1fr;
+      gap: 10px;
+    }
+    .latest-kind {
+      font-size: 10px;
+    }
+  }
+
+  .sections-toc {
+    margin: 3rem 0;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 640px) {
+    .toc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .toc-card {
+    display: grid;
+    gap: 8px;
+    padding: 1.25rem 1.25rem 1.25rem 1.25rem;
+    border: 0.5px solid var(--color-border);
+    border-radius: 4px;
+    color: inherit;
+    text-decoration: none;
+    background: transparent;
+    transition: border-color 0.15s ease-out, background-color 0.15s ease-out;
+  }
+  .toc-card:hover {
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+  .toc-card:hover .toc-cta {
+    color: var(--color-accent);
+  }
+  .toc-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+  }
+  .toc-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--color-text-primary);
+  }
+  .toc-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+  }
+  .toc-cta {
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    color: var(--color-text-secondary);
+    transition: color 0.15s ease-out;
   }
 </style>

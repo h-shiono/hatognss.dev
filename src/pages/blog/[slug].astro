@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import BlogLayout from '../../layouts/BlogLayout.astro';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { formatDate } from '../../lib/utils';
 
 export async function getStaticPaths() {
   const entries = await getCollection('blog', (e) => !e.data.draft);
@@ -11,13 +12,52 @@ interface Props { entry: CollectionEntry<'blog'>; }
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const { title, description, date, updatedDate, language } = entry.data;
+const isJapanese = language === 'ja';
 ---
-<BlogLayout
-  title={title}
-  description={description}
-  date={date}
-  updatedDate={updatedDate}
-  language={language}
->
-  <Content />
-</BlogLayout>
+<ArticleLayout title={title} description={description}>
+  <header class="post-header" lang={language}>
+    <h1>{title}</h1>
+    <p class="meta">
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      {updatedDate && (
+        <>
+          <span class="dot" aria-hidden="true">·</span>
+          <span>Updated <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time></span>
+        </>
+      )}
+      {isJapanese && (
+        <>
+          <span class="dot" aria-hidden="true">·</span>
+          <span class="lang-tag">JA</span>
+        </>
+      )}
+    </p>
+  </header>
+  <div lang={language}>
+    <Content />
+  </div>
+</ArticleLayout>
+
+<style>
+  .post-header {
+    margin-bottom: 2rem;
+  }
+  .post-header h1 {
+    margin: 0 0 0.5rem 0;
+  }
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+  .dot {
+    color: var(--color-text-tertiary);
+    margin: 0 6px;
+  }
+  .lang-tag {
+    color: var(--color-accent);
+    letter-spacing: 0.10em;
+  }
+</style>

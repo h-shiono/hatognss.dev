@@ -1,20 +1,173 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Section from '../../components/ui/Section.astro';
-import PublicationItem from '../../components/cards/PublicationItem.astro';
-import TalkItem from '../../components/cards/TalkItem.astro';
+import PageHeader from '../../components/layout/PageHeader.astro';
+import SectionLabel from '../../components/layout/SectionLabel.astro';
 
-const publications = (await getCollection('publications'))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const talks = (await getCollection('talks'))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const publications = await getCollection('publications');
+const talks = await getCollection('talks');
+
+const yearOf = (d: Date) => d.getUTCFullYear();
+const monthFmt = new Intl.DateTimeFormat('en-US', { month: 'short' });
+
+type Year = number;
+const years = Array.from(
+  new Set([
+    ...publications.map((p) => yearOf(p.data.date)),
+    ...talks.map((t) => yearOf(t.data.date)),
+  ]),
+).sort((a, b) => b - a);
+
+const byYear: Record<
+  Year,
+  { publications: typeof publications; talks: typeof talks }
+> = {};
+for (const y of years) byYear[y] = { publications: [], talks: [] };
+for (const p of publications) byYear[yearOf(p.data.date)].publications.push(p);
+for (const t of talks) byYear[yearOf(t.data.date)].talks.push(t);
+for (const y of years) {
+  byYear[y].publications.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  byYear[y].talks.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+}
 ---
-<BaseLayout title="Research" description="Publications and talks">
-  <Section title="Publications">
-    {publications.map((e) => <PublicationItem entry={e} />)}
-  </Section>
-  <Section title="Talks">
-    {talks.map((e) => <TalkItem entry={e} />)}
-  </Section>
+<BaseLayout title="Research" description="Publications and talks.">
+  <PageHeader
+    title="Research"
+    description="Peer-reviewed publications and conference talks on GNSS positioning."
+  />
+
+  {years.map((year) => (
+    <section class="year">
+      <h2 class="year-heading"><span class="year-num">{year}</span></h2>
+
+      {byYear[year].publications.length > 0 && (
+        <div class="group">
+          <SectionLabel as="h3" en="Publications" ja="論文" />
+          <ul class="entry-list">
+            {byYear[year].publications.map((p) => (
+              <li class="entry">
+                <a href={`/research/publications/${p.slug}/`} class="entry-row">
+                  <span class="entry-date">{monthFmt.format(p.data.date)}</span>
+                  <span class="entry-body">
+                    <span class="entry-title">{p.data.title}</span>
+                    <span class="entry-meta">
+                      {p.data.authors.join(', ')}
+                      <span class="dot" aria-hidden="true">·</span>
+                      <em>{p.data.venue}</em>
+                      <span class="dot" aria-hidden="true">·</span>
+                      <span class="entry-status">{p.data.status}</span>
+                    </span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {byYear[year].talks.length > 0 && (
+        <div class="group">
+          <SectionLabel as="h3" en="Talks" ja="講演" />
+          <ul class="entry-list">
+            {byYear[year].talks.map((t) => (
+              <li class="entry">
+                <a href={`/research/talks/${t.slug}/`} class="entry-row">
+                  <span class="entry-date">{monthFmt.format(t.data.date)}</span>
+                  <span class="entry-body">
+                    <span class="entry-title">{t.data.title}</span>
+                    <span class="entry-meta">
+                      {t.data.event}
+                      {t.data.location && (
+                        <>
+                          <span class="dot" aria-hidden="true">·</span>
+                          <span>{t.data.location}</span>
+                        </>
+                      )}
+                      <span class="dot" aria-hidden="true">·</span>
+                      <span class="entry-status">{t.data.type}</span>
+                    </span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  ))}
 </BaseLayout>
+
+<style>
+  .year {
+    margin: 3rem 0;
+  }
+  .year-heading {
+    margin: 0 0 1.5rem 0;
+  }
+  .year-num {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+  }
+  .group {
+    margin-bottom: 2rem;
+  }
+  .entry-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .entry {
+    border-bottom: 0.5px solid var(--color-border);
+  }
+  .entry-row {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+    padding: 12px 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  .entry-row:hover {
+    text-decoration: none;
+  }
+  .entry-row:hover .entry-title {
+    color: var(--color-accent);
+  }
+  .entry-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    padding-top: 2px;
+  }
+  .entry-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .entry-title {
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    transition: color 0.15s ease-out;
+  }
+  .entry-meta {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+  .entry-meta em {
+    font-style: italic;
+  }
+  .entry-status {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .dot {
+    margin: 0 6px;
+    color: var(--color-text-tertiary);
+  }
+</style>
