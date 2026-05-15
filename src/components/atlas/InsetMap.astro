@@ -1,0 +1,65 @@
+---
+import { getLandFeatures } from '../../lib/atlas/worldTopology';
+import { makePathGenerator, makeProjection } from '../../lib/atlas/projection';
+
+interface Props {
+  lat: number;
+  lng: number;
+  width?: number;
+  height?: number;
+  label?: string;
+}
+
+const { lat, lng, width = 240, height = 120, label } = Astro.props;
+
+const projection = makeProjection(width, height);
+const pathGen = makePathGenerator(projection);
+const landPath = pathGen(getLandFeatures()) ?? '';
+const [x, y] = projection([lng, lat]) ?? [0, 0];
+---
+
+<figure class="inset-map">
+  <svg
+    viewBox={`0 0 ${width} ${height}`}
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={label ?? 'Location map'}
+  >
+    <path
+      d={landPath}
+      fill="var(--color-background-secondary)"
+      stroke="var(--color-border-tertiary)"
+      stroke-width="0.5"
+    />
+    <circle
+      cx={x}
+      cy={y}
+      r="3"
+      fill="var(--color-accent)"
+      stroke="var(--color-background)"
+      stroke-width="1"
+    />
+  </svg>
+  {label && <figcaption>{label}</figcaption>}
+</figure>
+
+<style>
+  .inset-map {
+    margin: 0;
+    max-width: 240px;
+  }
+
+  .inset-map svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .inset-map figcaption {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-foreground-muted);
+    margin-top: 4px;
+    text-align: right;
+  }
+</style>

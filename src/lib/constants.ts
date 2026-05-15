@@ -17,6 +17,7 @@ export const SOCIAL = {
 
 export const NAV: ReadonlyArray<{ href: string; label: string }> = [
   { href: '/research/', label: 'Research' },
+  { href: '/atlas/', label: 'Atlas' },
   { href: '/oss/', label: 'OSS' },
   { href: '/works/', label: 'Works' },
   { href: '/blog/', label: 'Blog' },

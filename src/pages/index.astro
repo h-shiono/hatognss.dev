@@ -25,6 +25,7 @@ const featured = {
   <Section title="Research" eyebrow="Publications & Talks">
     {featured.publications.map((e) => <PublicationItem entry={e} />)}
     {featured.talks.map((e) => <TalkItem entry={e} />)}
+    <p class="see-atlas"><a href="/atlas/">see atlas →</a></p>
     <a href="/research/">All research →</a>
   </Section>
 
@@ -43,3 +44,18 @@ const featured = {
     <a href="/blog/">All posts →</a>
   </Section>
 </BaseLayout>
+
+<style>
+  .see-atlas {
+    margin: 8px 0;
+  }
+  .see-atlas a {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-foreground-muted);
+    text-decoration: none;
+  }
+  .see-atlas a:hover {
+    color: var(--color-accent);
+  }
+</style>

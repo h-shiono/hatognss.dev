@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import ContentLayout from '../../../layouts/ContentLayout.astro';
+import InsetMap from '../../../components/atlas/InsetMap.astro';
 import { formatDate } from '../../../lib/utils';
 
 export async function getStaticPaths() {
@@ -11,7 +12,7 @@ export async function getStaticPaths() {
 interface Props { entry: CollectionEntry<'talks'>; }
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-const { title, event, date, location, type, slides_url, slides_pdf, video_url, abstract, tags } = entry.data;
+const { title, event, date, location, type, slides_url, slides_pdf, video_url, abstract, tags, lat, lng } = entry.data;
 ---
 <ContentLayout title={title} description={abstract}>
   <header>
@@ -19,6 +20,9 @@ const { title, event, date, location, type, slides_url, slides_pdf, video_url, a
     <p>{event}{location && <span> · {location}</span>} · {type}</p>
     <time datetime={date.toISOString()}>{formatDate(date)}</time>
   </header>
+  {lat != null && lng != null && (
+    <InsetMap lat={lat} lng={lng} label={location} />
+  )}
   <p>{abstract}</p>
   <ul aria-label="Links">
     {slides_url && <li><a href={slides_url} rel="noopener" target="_blank">Slides</a></li>}

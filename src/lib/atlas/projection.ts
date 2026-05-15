@@ -13,11 +13,11 @@ export const ATLAS_HEIGHT = 320;
 
 const SPHERE: GeoSphere = { type: 'Sphere' };
 
-export function makeProjection(): GeoProjection {
-  return geoNaturalEarth1().fitSize(
-    [ATLAS_WIDTH, ATLAS_HEIGHT],
-    SPHERE,
-  );
+export function makeProjection(
+  width: number = ATLAS_WIDTH,
+  height: number = ATLAS_HEIGHT,
+): GeoProjection {
+  return geoNaturalEarth1().fitSize([width, height], SPHERE);
 }
 
 export function makePathGenerator(projection: GeoProjection): GeoPath {
