@@ -1,0 +1,179 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/layout/PageHeader.astro';
+
+type Kind = 'talk' | 'paper' | 'oss' | 'post';
+
+interface LogEntry {
+  kind: Kind;
+  slug: string;
+  date: Date;
+  title: string;
+  context: string;
+  href: string;
+}
+
+const talks = await getCollection('talks');
+const publications = await getCollection('publications');
+const ossProjects = await getCollection('projects', (e) => e.data.category === 'oss');
+const posts = await getCollection('blog', (e) => !e.data.draft);
+
+const entries: LogEntry[] = [
+  ...talks.map((t): LogEntry => ({
+    kind: 'talk',
+    slug: t.slug,
+    date: t.data.date,
+    title: t.data.title,
+    context: t.data.location ? `${t.data.event} · ${t.data.location}` : t.data.event,
+    href: `/research/talks/${t.slug}/`,
+  })),
+  ...publications.map((p): LogEntry => ({
+    kind: 'paper',
+    slug: p.slug,
+    date: p.data.date,
+    title: p.data.title,
+    context: p.data.venue,
+    href: `/research/publications/${p.slug}/`,
+  })),
+  ...ossProjects.map((o): LogEntry => ({
+    kind: 'oss',
+    slug: o.slug,
+    date: o.data.updatedDate ?? o.data.startDate,
+    title: o.data.title,
+    context: o.data.summary,
+    href: `/oss/${o.slug}/`,
+  })),
+  ...posts.map((b): LogEntry => ({
+    kind: 'post',
+    slug: b.slug,
+    date: b.data.date,
+    title: b.data.title,
+    context: b.data.description,
+    href: `/blog/${b.slug}/`,
+  })),
+].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const yearOf = (d: Date) => d.getUTCFullYear();
+const monthDayFmt = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: '2-digit',
+});
+
+const years = Array.from(new Set(entries.map((e) => yearOf(e.date)))).sort(
+  (a, b) => b - a,
+);
+
+const kindLabel: Record<Kind, string> = {
+  talk: 'TALK',
+  paper: 'PAPER',
+  oss: 'OSS',
+  post: 'POST',
+};
+---
+<BaseLayout
+  title="Log"
+  description="A chronological log of recent activity — talks, publications, OSS releases, and blog posts."
+>
+  <PageHeader
+    title="Log"
+    description="A chronological record of talks, publications, OSS releases, and blog posts."
+  />
+
+  {years.map((year) => (
+    <section class="year">
+      <h2 class="year-heading"><span class="year-num">{year}</span></h2>
+      <ul class="log-list">
+        {entries.filter((e) => yearOf(e.date) === year).map((e) => (
+          <li>
+            <a href={e.href} class="log-row">
+              <span class="log-date">{monthDayFmt.format(e.date)}</span>
+              <span class="log-kind">{kindLabel[e.kind]}</span>
+              <span class="log-body">
+                <span class="log-title">{e.title}</span>
+                <span class="log-context">{e.context}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</BaseLayout>
+
+<style>
+  .year {
+    margin: 3rem 0;
+  }
+  .year-heading {
+    margin: 0 0 1.25rem 0;
+  }
+  .year-num {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+  }
+
+  .log-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .log-row {
+    display: grid;
+    grid-template-columns: 64px 60px 1fr;
+    gap: 16px;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--color-border);
+    color: inherit;
+    text-decoration: none;
+  }
+  .log-row:hover {
+    text-decoration: none;
+  }
+  .log-row:hover .log-title {
+    color: var(--color-accent);
+  }
+
+  .log-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+  .log-kind {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    color: var(--color-accent);
+  }
+  .log-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .log-title {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    transition: color 0.15s ease-out;
+  }
+  .log-context {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 640px) {
+    .log-row {
+      grid-template-columns: 52px 52px 1fr;
+      gap: 10px;
+    }
+    .log-kind {
+      font-size: 10px;
+    }
+  }
+</style>

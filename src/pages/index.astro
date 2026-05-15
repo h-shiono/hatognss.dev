@@ -1,53 +1,6 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionLabel from '../components/layout/SectionLabel.astro';
-
-type AnyEntry =
-  | { kind: 'talk'; slug: string; date: Date; title: string; href: string }
-  | { kind: 'paper'; slug: string; date: Date; title: string; href: string }
-  | { kind: 'oss'; slug: string; date: Date; title: string; href: string };
-
-const talks = await getCollection('talks');
-const publications = await getCollection('publications');
-const ossProjects = await getCollection('projects', (e) => e.data.category === 'oss');
-
-const latest: AnyEntry[] = [
-  ...talks.map((t): AnyEntry => ({
-    kind: 'talk',
-    slug: t.slug,
-    date: t.data.date,
-    title: t.data.title,
-    href: `/research/talks/${t.slug}/`,
-  })),
-  ...publications.map((p): AnyEntry => ({
-    kind: 'paper',
-    slug: p.slug,
-    date: p.data.date,
-    title: p.data.title,
-    href: `/research/publications/${p.slug}/`,
-  })),
-  ...ossProjects.map((o): AnyEntry => ({
-    kind: 'oss',
-    slug: o.slug,
-    date: o.data.updatedDate ?? o.data.startDate,
-    title: o.data.title,
-    href: `/oss/${o.slug}/`,
-  })),
-]
-  .sort((a, b) => b.date.getTime() - a.date.getTime())
-  .slice(0, 5);
-
-const dateFmt = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'short',
-});
-
-const kindLabel: Record<AnyEntry['kind'], string> = {
-  talk: 'TALK',
-  paper: 'PAPER',
-  oss: 'OSS',
-};
 
 const sections = [
   {
@@ -85,21 +38,6 @@ const sections = [
     <p class="hero-tagline-en" lang="en">
       <em>Surveying, thinking, building — across satellite positioning / PNT</em>
     </p>
-  </section>
-
-  <section class="latest">
-    <SectionLabel as="h2" en="Latest" ja="最近の記録" />
-    <ul class="latest-list">
-      {latest.map((e) => (
-        <li>
-          <a href={e.href} class="latest-row">
-            <span class="latest-date">{dateFmt.format(e.date)}</span>
-            <span class="latest-kind">{kindLabel[e.kind]}</span>
-            <span class="latest-title">{e.title}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
   </section>
 
   <section class="sections-toc">
@@ -151,58 +89,6 @@ const sections = [
   @media (max-width: 640px) {
     .hero-tagline {
       font-size: 26px;
-    }
-  }
-
-  .latest {
-    margin: 3rem 0;
-  }
-  .latest-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .latest-row {
-    display: grid;
-    grid-template-columns: 90px 70px 1fr;
-    gap: 16px;
-    align-items: baseline;
-    padding: 10px 0;
-    border-bottom: 0.5px solid var(--color-border);
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.15s ease-out;
-  }
-  .latest-row:hover {
-    text-decoration: none;
-  }
-  .latest-row:hover .latest-title {
-    color: var(--color-accent);
-  }
-  .latest-date {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--color-text-secondary);
-  }
-  .latest-kind {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.10em;
-    color: var(--color-accent);
-  }
-  .latest-title {
-    font-size: 15px;
-    line-height: 1.5;
-    color: var(--color-text-primary);
-    transition: color 0.15s ease-out;
-  }
-  @media (max-width: 640px) {
-    .latest-row {
-      grid-template-columns: 76px 56px 1fr;
-      gap: 10px;
-    }
-    .latest-kind {
-      font-size: 10px;
     }
   }
 

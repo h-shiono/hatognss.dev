@@ -200,9 +200,22 @@ Each page composes the BaseLayout (masthead + slot + footer) with its own middle
 ### Home (`/`)
 
 Sections in order:
-1. **Hero**: role line + Japanese tagline + English tagline (italic)
-2. **Latest**: 3–5 most recent items across talks, publications, and OSS releases (chronological, not curated)
-3. **Sections TOC**: 4 cards (Research, OSS, Atlas, Blog). Works can be added once mature
+1. **Hero**: role line + JP tagline + EN subtitle
+2. **Sections TOC**: 4 cards (Research, OSS, Atlas, Blog)
+
+No "Latest" or activity feed on the home page — the almanac aesthetic 
+prioritizes timeless content. Recent activity is available at `/log/`, 
+discoverable via the footer.
+
+### Log (`/log/`)
+
+A chronological log of recent activity across talks, publications, OSS 
+releases, and blog posts. Auto-generated from Content Collections.
+
+- Items grouped by year, reverse-chronological within each year
+- Entry format: date (mono) | kind tag | title | venue/context
+- Footer link only; not in top navigation
+- No manual maintenance — updates automatically with new content
 
 ### Research (`/research/`)
 
