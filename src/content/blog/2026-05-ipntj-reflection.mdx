@@ -1,0 +1,87 @@
+---
+title: "IPNTJ 2026 全国大会で MRTKLIB について講演しました"
+description: "測位航法学会 全国大会 2026 でのセミナー講演の振り返り"
+date: 2026-05-15
+tags: ["MRTKLIB", "mrtklib-docker-ui", "IPNTJ"]
+draft: false
+featured: false
+language: ja
+---
+
+import SlidesCard from '../../components/embeds/SlidesCard.astro';
+import cover from '../../assets/slides/mrtklib-intro-cover.png';
+
+5月13日〜16日にかけて開催された[測位航法学会 全国大会2026](https://www.gnss-pnt.org/%E5%85%A8%E5%9B%BD%E5%A4%A7%E4%BC%9A%E3%83%88%E3%83%83%E3%83%97/)にて、1日目のセミナーで「MRTKLIB の紹介」を担当しました。
+
+当日の発表資料は以下をご覧ください。
+
+<SlidesCard
+  cover={cover}
+  pdf="/pdfs/mrtklib-intro.pdf"
+  title="MRTKLIB の紹介"
+  event="IPNTJ 2026 全国大会"
+  pages={32}
+  size="9 MB"
+/>
+
+講演中、講演後とさまざまなご質問・ご意見をお寄せいただき、大変勉強になりました。
+高須先生からも直接応援のお言葉、コメント・アドバイスをいただき、誠にありがとうございました。
+
+## いただいたご質問とその対応
+
+講演中・講演後にいただいた主なご質問について、それぞれ Issue として整理しました。
+以下、対応方針も含めて共有します。
+
+### Docker 以外の入り口について
+
+Issue: [[Feature] Provide a non-Docker distribution channel (Windows / macOS desktop app)](https://github.com/h-shiono/MRTKLIB/issues/114)
+
+Docker 以外の入り口を検討していないか (e.g. Jupyterlab) ？というご質問がありました。
+また、ご質問をいただいた方以外にも「Docker を勉強しながら使おうとしてみています」との声をいただき、自分が慣れているという意味で Docker を捉えていたなとハッとさせられました。
+どのような形態にするかは色々検討したいと思いますが、あまりメンテナンスコストを上げるような方向にはしたくないと考えています。
+今できそうかな？と考えているのは mrtklib-docker-ui をほぼそのまま流用する形で Windows App や Mac App にする方法です。
+
+### GitHub 以外の連絡手段について
+
+Issue: [[Feature] Provide a non-GitHub contact channel (email) for users who cannot use GitHub Issues](https://github.com/h-shiono/MRTKLIB/issues/115)
+
+セキュリティ上 GitHub Issue などが立てられない場合の連絡手段が欲しい、というご質問がありました。
+これは私も経験があるので、ぜひ対応したいと思っています。
+おそらく MRTKLIB の GitHub Pages に連絡先を掲載する形になるかと思います。
+
+### 単独測位精度の向上について
+
+Issue: [[Feature] Improve single-point positioning (SPP) accuracy to be competitive with commercial receivers](https://github.com/h-shiono/MRTKLIB/issues/116)
+
+単独測位精度の向上を検討していないか？というご質問がありました。
+「市販受信機に比べ RTKLIB の単独測位性能が悪いときがある」という点については CLAS 等ばかりを追いかけていて気がつけていなかった点でした。
+単独測位の精度向上手法については、高須先生から SPP 改善における課題や具体的なアドバイスを、また、他の参加者の方からも実体験や改善方針についてコメントをいただきました。
+
+まずは手法の調査を行い、実装の方針を固めたいと思っています。
+
+### cssr2rtcm3 を活用する場合の、COM ポートの占有について
+
+Issue: [cssr2rtcm3: collapse 2-port serial setup to a single bidirectional COM via mrtk relay -b](https://github.com/h-shiono/MRTKLIB/issues/117)
+
+mosaic-G5 × cssr2rtcm3 で動作させる時に、[現在のチュートリアル](https://h-shiono.github.io/MRTKLIB/hardware/cssr2rtcm3-mosaic-g5/)ではUSB経由で使えるCOMポート2つを In/Out で占有してしまうような説明となっています。
+実際のユースケースにおいては、COM ポートを別の用途で使い分けたい場面があると伺いました。
+おそらく `mrtk relay -b` にて対応可能かと思いますので、検証の上ドキュメントを更新したいと考えています。
+
+---
+
+### MRTKLIB のスコープと役割について
+
+これは Issue にはしていませんが、重要な観点でのご質問でした。
+「MRTKLIB はさまざまな並列ライブラリを取り込んでいくのか、参考実装としての立ち位置なのか」という問いです。
+出発点としては、QZSS の補強サービスを一つのライブラリで実行したい、というモチベーションがあったのでどちらかといえば前者でした。
+しかし、「RTKLIB」として考えた時には標準測位ライブラリとしての役割が期待されていると思います。
+この点については、今後もよくよく考えながら判断していきたいと考えています。
+
+---
+
+MRTKLIB はまだ公開2〜3ヶ月の段階ですが、既にさまざまな方に認知いただいていること、また今回このような機会をいただけたこと、大変感謝しております。
+もし Issue お気づきの点がありましたら、直接それぞれの Issue にコメントいただけますと幸いです。
+
+今回の講演で、「OSS のメンテナとしての自分」という役割を気づかせていただきました。
+ご参加いただいた皆様、改めてありがとうございました。
+引き続きどうぞよろしくお願いいたします。
