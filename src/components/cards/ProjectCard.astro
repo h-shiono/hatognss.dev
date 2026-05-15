@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Tag from '../ui/Tag.astro';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
+
+const { entry } = Astro.props;
+const { title, summary, status, tech, tags, repo, demo } = entry.data;
+const href = `/${entry.data.category === 'oss' ? 'oss' : entry.data.category === 'work' ? 'works' : 'blog'}/${entry.slug}/`;
+---
+<article>
+  <header>
+    <h3><a href={href}>{title}</a></h3>
+    <span data-status={status}>{status}</span>
+  </header>
+  <p>{summary}</p>
+  <ul aria-label="Tech">
+    {tech.map((t) => <li><Tag>{t}</Tag></li>)}
+  </ul>
+  {tags.length > 0 && (
+    <ul aria-label="Tags">
+      {tags.map((t) => <li><Tag>{t}</Tag></li>)}
+    </ul>
+  )}
+  <footer>
+    {repo && <a href={repo} rel="noopener" target="_blank">Repo</a>}
+    {demo && <a href={demo} rel="noopener" target="_blank">Demo</a>}
+  </footer>
+</article>

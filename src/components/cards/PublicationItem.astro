@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Tag from '../ui/Tag.astro';
+
+interface Props {
+  entry: CollectionEntry<'publications'>;
+}
+
+const { entry } = Astro.props;
+const { title, authors, venue, year, status, doi, url, pdf, tags } = entry.data;
+---
+<article>
+  <h3><a href={`/research/publications/${entry.slug}/`}>{title}</a></h3>
+  <p>{authors.join(', ')}</p>
+  <p>
+    <em>{venue}</em>, {year}
+    <span data-status={status}> · {status}</span>
+  </p>
+  <ul aria-label="Links">
+    {doi && <li><a href={`https://doi.org/${doi}`} rel="noopener" target="_blank">DOI</a></li>}
+    {url && <li><a href={url} rel="noopener" target="_blank">Publisher</a></li>}
+    {pdf && <li><a href={pdf} rel="noopener" target="_blank">PDF</a></li>}
+  </ul>
+  {tags.length > 0 && (
+    <ul aria-label="Tags">
+      {tags.map((t) => <li><Tag>{t}</Tag></li>)}
+    </ul>
+  )}
+</article>

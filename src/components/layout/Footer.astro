@@ -1,0 +1,8 @@
+---
+import { SITE, SOCIAL } from '../../lib/constants';
+const year = new Date().getFullYear();
+---
+<footer>
+  <small>© {year} {SITE.author}</small>
+  {SOCIAL.email && <a href={`mailto:${SOCIAL.email}`}>Email</a>}
+</footer>

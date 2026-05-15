@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import BlogCard from '../../components/cards/BlogCard.astro';
+
+const posts = (await getCollection('blog', (e) => !e.data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<BaseLayout title="Blog" description="Writing">
+  <Section title="Blog">
+    {posts.map((e) => <BlogCard entry={e} />)}
+  </Section>
+</BaseLayout>

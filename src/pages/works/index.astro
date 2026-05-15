@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import ProjectCard from '../../components/cards/ProjectCard.astro';
+
+const projects = (await getCollection('projects', (e) => e.data.category === 'work'))
+  .sort((a, b) => (b.data.updatedDate ?? b.data.startDate).getTime() - (a.data.updatedDate ?? a.data.startDate).getTime());
+---
+<BaseLayout title="Works" description="Services and applications">
+  <Section title="Works">
+    {projects.map((e) => <ProjectCard entry={e} />)}
+  </Section>
+</BaseLayout>

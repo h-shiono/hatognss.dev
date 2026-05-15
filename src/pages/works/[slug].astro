@@ -1,0 +1,33 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { formatDate } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('projects', (e) => e.data.category === 'work');
+  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+interface Props { entry: CollectionEntry<'projects'>; }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, summary, status, tech, tags, repo, demo, docs, startDate, updatedDate, highlights } = entry.data;
+---
+<ContentLayout title={title} description={summary}>
+  <header>
+    <h1>{title}</h1>
+    <p>{summary}</p>
+    <p><span data-status={status}>{status}</span> · since {formatDate(startDate)}{updatedDate && <span> · updated {formatDate(updatedDate)}</span>}</p>
+  </header>
+  <ul aria-label="Links">
+    {repo && <li><a href={repo} rel="noopener" target="_blank">Repo</a></li>}
+    {demo && <li><a href={demo} rel="noopener" target="_blank">Demo</a></li>}
+    {docs && <li><a href={docs} rel="noopener" target="_blank">Docs</a></li>}
+  </ul>
+  {highlights && highlights.length > 0 && (
+    <ul>{highlights.map((h) => <li>{h}</li>)}</ul>
+  )}
+  <p>Tech: {tech.join(', ')}</p>
+  {tags.length > 0 && <p>Tags: {tags.join(', ')}</p>}
+  <Content />
+</ContentLayout>

@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/hero/Hero.astro';
+import Section from '../components/ui/Section.astro';
+import PublicationItem from '../components/cards/PublicationItem.astro';
+import TalkItem from '../components/cards/TalkItem.astro';
+import ProjectCard from '../components/cards/ProjectCard.astro';
+import BlogCard from '../components/cards/BlogCard.astro';
+
+const featured = {
+  publications: (await getCollection('publications', (e) => e.data.featured))
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+  talks: (await getCollection('talks', (e) => e.data.featured))
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+  oss: (await getCollection('projects', (e) => e.data.featured && e.data.category === 'oss')),
+  works: (await getCollection('projects', (e) => e.data.featured && e.data.category === 'work')),
+  blog: (await getCollection('blog', (e) => e.data.featured && !e.data.draft))
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+};
+---
+<BaseLayout>
+  <Hero />
+
+  <Section title="Research" eyebrow="Publications & Talks">
+    {featured.publications.map((e) => <PublicationItem entry={e} />)}
+    {featured.talks.map((e) => <TalkItem entry={e} />)}
+    <a href="/research/">All research →</a>
+  </Section>
+
+  <Section title="OSS" eyebrow="Open source">
+    {featured.oss.map((e) => <ProjectCard entry={e} />)}
+    <a href="/oss/">All OSS →</a>
+  </Section>
+
+  <Section title="Works" eyebrow="Services & applications">
+    {featured.works.map((e) => <ProjectCard entry={e} />)}
+    <a href="/works/">All works →</a>
+  </Section>
+
+  <Section title="Blog" eyebrow="Writing">
+    {featured.blog.map((e) => <BlogCard entry={e} />)}
+    <a href="/blog/">All posts →</a>
+  </Section>
+</BaseLayout>

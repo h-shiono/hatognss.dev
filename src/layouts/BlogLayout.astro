@@ -1,0 +1,26 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { formatDate } from '../lib/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  updatedDate?: Date;
+  language: 'ja' | 'en';
+}
+
+const { title, description, date, updatedDate, language } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <article lang={language}>
+    <header>
+      <h1>{title}</h1>
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      {updatedDate && (
+        <span> · Updated <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time></span>
+      )}
+    </header>
+    <slot />
+  </article>
+</BaseLayout>

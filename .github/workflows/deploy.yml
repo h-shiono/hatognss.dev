@@ -1,0 +1,26 @@
+name: Deploy
+
+# Cloudflare Pages auto-deploys from `main` (see CLAUDE.md §11), so this
+# workflow only runs build + typecheck as a CI gate. Wire up Pages
+# deployment in the Cloudflare dashboard, not here.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm astro check
+      - run: pnpm build

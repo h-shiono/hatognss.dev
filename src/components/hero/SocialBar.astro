@@ -1,0 +1,15 @@
+---
+import { SOCIAL } from '../../lib/constants';
+
+const links = [
+  { href: SOCIAL.github, label: 'GitHub' },
+  { href: SOCIAL.zenn, label: 'Zenn' },
+  { href: SOCIAL.x, label: 'X' },
+  { href: SOCIAL.researchgate, label: 'ResearchGate' },
+].filter((l) => l.href);
+---
+<ul aria-label="Social links">
+  {links.map(({ href, label }) => (
+    <li><a href={href} rel="me noopener" target="_blank">{label}</a></li>
+  ))}
+</ul>

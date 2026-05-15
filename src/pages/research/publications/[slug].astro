@@ -1,0 +1,31 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import ContentLayout from '../../../layouts/ContentLayout.astro';
+import { formatDate } from '../../../lib/utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('publications');
+  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+interface Props { entry: CollectionEntry<'publications'>; }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, authors, venue, year, status, doi, url, pdf, abstract, date, tags } = entry.data;
+---
+<ContentLayout title={title} description={abstract}>
+  <header>
+    <h1>{title}</h1>
+    <p>{authors.join(', ')}</p>
+    <p><em>{venue}</em>, {year} · <span data-status={status}>{status}</span></p>
+    <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  </header>
+  <p>{abstract}</p>
+  <ul aria-label="Links">
+    {doi && <li><a href={`https://doi.org/${doi}`} rel="noopener" target="_blank">DOI</a></li>}
+    {url && <li><a href={url} rel="noopener" target="_blank">Publisher</a></li>}
+    {pdf && <li><a href={pdf} rel="noopener" target="_blank">PDF</a></li>}
+  </ul>
+  {tags.length > 0 && <p>Tags: {tags.join(', ')}</p>}
+  <Content />
+</ContentLayout>

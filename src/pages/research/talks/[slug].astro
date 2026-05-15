@@ -1,0 +1,30 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import ContentLayout from '../../../layouts/ContentLayout.astro';
+import { formatDate } from '../../../lib/utils';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('talks');
+  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+interface Props { entry: CollectionEntry<'talks'>; }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, event, date, location, type, slides_url, slides_pdf, video_url, abstract, tags } = entry.data;
+---
+<ContentLayout title={title} description={abstract}>
+  <header>
+    <h1>{title}</h1>
+    <p>{event}{location && <span> · {location}</span>} · {type}</p>
+    <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  </header>
+  <p>{abstract}</p>
+  <ul aria-label="Links">
+    {slides_url && <li><a href={slides_url} rel="noopener" target="_blank">Slides</a></li>}
+    {slides_pdf && <li><a href={slides_pdf} rel="noopener" target="_blank">PDF</a></li>}
+    {video_url && <li><a href={video_url} rel="noopener" target="_blank">Video</a></li>}
+  </ul>
+  {tags.length > 0 && <p>Tags: {tags.join(', ')}</p>}
+  <Content />
+</ContentLayout>

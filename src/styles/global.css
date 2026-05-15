@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/*
+ * Theme tokens. See CLAUDE.md §7 for direction.
+ * - Restrained palette: monochrome base + one accent. No more than 3 hues.
+ * - Typography pairing TBD (confirm with user before installing fonts).
+ */
+@theme {
+  /* --color-accent: ... */
+  /* --font-display: ... */
+  /* --font-body: ... */
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}

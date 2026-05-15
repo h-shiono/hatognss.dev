@@ -1,0 +1,15 @@
+---
+import { SITE } from '../../lib/constants';
+import SocialBar from './SocialBar.astro';
+
+interface Props {
+  tagline?: string;
+}
+
+const { tagline = SITE.description } = Astro.props;
+---
+<section>
+  <h1>{SITE.title}</h1>
+  <p>{tagline}</p>
+  <SocialBar />
+</section>

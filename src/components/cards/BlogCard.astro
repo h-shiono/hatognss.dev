@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Tag from '../ui/Tag.astro';
+import { formatDate } from '../../lib/utils';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, date, tags, language } = entry.data;
+---
+<article lang={language}>
+  <h3><a href={`/blog/${entry.slug}/`}>{title}</a></h3>
+  <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  <p>{description}</p>
+  {tags.length > 0 && (
+    <ul aria-label="Tags">
+      {tags.map((t) => <li><Tag>{t}</Tag></li>)}
+    </ul>
+  )}
+</article>

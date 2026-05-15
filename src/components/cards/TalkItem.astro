@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Tag from '../ui/Tag.astro';
+import { formatDate } from '../../lib/utils';
+
+interface Props {
+  entry: CollectionEntry<'talks'>;
+}
+
+const { entry } = Astro.props;
+const { title, event, date, location, type, slides_url, slides_pdf, video_url, tags } = entry.data;
+---
+<article>
+  <h3><a href={`/research/talks/${entry.slug}/`}>{title}</a></h3>
+  <p>
+    {event}
+    {location && <span> · {location}</span>}
+    <span> · {type}</span>
+  </p>
+  <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  <ul aria-label="Links">
+    {slides_url && <li><a href={slides_url} rel="noopener" target="_blank">Slides</a></li>}
+    {slides_pdf && <li><a href={slides_pdf} rel="noopener" target="_blank">PDF</a></li>}
+    {video_url && <li><a href={video_url} rel="noopener" target="_blank">Video</a></li>}
+  </ul>
+  {tags.length > 0 && (
+    <ul aria-label="Tags">
+      {tags.map((t) => <li><Tag>{t}</Tag></li>)}
+    </ul>
+  )}
+</article>
