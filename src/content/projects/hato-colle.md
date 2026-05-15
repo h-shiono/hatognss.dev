@@ -2,7 +2,7 @@
 title: "hato-colle"
 category: hobby
 status: active
-summary: "Personal hobby project. Placeholder summary — replace."
+summary: "A GNSS-tagged pigeon collection"
 tech: []
 tags: ["Geotagging", "Birdwatching"]
 repo: "https://github.com/h-shiono/hato-colle"
