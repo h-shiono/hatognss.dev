@@ -1,6 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import ContentLayout from '../../../layouts/ContentLayout.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { formatDate } from '../../../lib/utils';
 
 export async function getStaticPaths() {
@@ -13,19 +13,160 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 const { title, authors, venue, year, status, doi, url, pdf, abstract, date, tags } = entry.data;
 ---
-<ContentLayout title={title} description={abstract}>
-  <header>
-    <h1>{title}</h1>
-    <p>{authors.join(', ')}</p>
-    <p><em>{venue}</em>, {year} · <span data-status={status}>{status}</span></p>
-    <time datetime={date.toISOString()}>{formatDate(date)}</time>
-  </header>
-  <p>{abstract}</p>
-  <ul aria-label="Links">
-    {doi && <li><a href={`https://doi.org/${doi}`} rel="noopener" target="_blank">DOI</a></li>}
-    {url && <li><a href={url} rel="noopener" target="_blank">Publisher</a></li>}
-    {pdf && <li><a href={pdf} rel="noopener" target="_blank">PDF</a></li>}
-  </ul>
-  {tags.length > 0 && <p>Tags: {tags.join(', ')}</p>}
-  <Content />
-</ContentLayout>
+<BaseLayout title={title} description={abstract}>
+  <article class="detail">
+    <header class="detail-header">
+      <p class="eyebrow">Publication</p>
+      <h1 class="title">{title}</h1>
+      <p class="authors">{authors.join(', ')}</p>
+      <p class="venue"><em>{venue}</em>, {year}</p>
+
+      <dl class="meta">
+        <div>
+          <dt>Status</dt>
+          <dd><span data-status={status}>{status}</span></dd>
+        </div>
+        <div>
+          <dt>Date</dt>
+          <dd><time datetime={date.toISOString()}>{formatDate(date)}</time></dd>
+        </div>
+      </dl>
+
+      {(doi || url || pdf) && (
+        <ul class="link-bar" aria-label="External links">
+          {doi && <li><a href={`https://doi.org/${doi}`} rel="noopener" target="_blank">DOI →</a></li>}
+          {url && <li><a href={url} rel="noopener" target="_blank">Publisher →</a></li>}
+          {pdf && <li><a href={pdf} rel="noopener" target="_blank">PDF →</a></li>}
+        </ul>
+      )}
+
+      {tags.length > 0 && (
+        <ul class="tags" aria-label="Tags">
+          {tags.map((t) => <li>{t}</li>)}
+        </ul>
+      )}
+    </header>
+
+    <section class="abstract prose">
+      <p>{abstract}</p>
+    </section>
+
+    <section class="body prose">
+      <Content />
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .detail {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .detail-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 0.5px solid var(--color-border);
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0 0 0.75rem 0;
+  }
+  .title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--color-text-primary);
+    margin: 0 0 0.75rem 0;
+  }
+  .authors {
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    margin: 0 0 0.25rem 0;
+  }
+  .venue {
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  .venue em {
+    font-style: italic;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem 1.5rem;
+    margin: 1.5rem 0 0 0;
+    padding: 0;
+  }
+  .meta div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .meta dt {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin: 0;
+  }
+  .meta dd {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  .link-bar {
+    list-style: none;
+    margin: 1.5rem 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .link-bar a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--color-border);
+    padding-bottom: 2px;
+    transition: color 0.15s ease-out, border-color 0.15s ease-out;
+  }
+  .link-bar a:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+  .tags {
+    list-style: none;
+    margin: 1rem 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+  .tags li {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+  .abstract {
+    margin: 0 0 2.5rem 0;
+    font-style: italic;
+    color: var(--color-text-secondary);
+  }
+  .body {
+    margin: 0;
+  }
+</style>

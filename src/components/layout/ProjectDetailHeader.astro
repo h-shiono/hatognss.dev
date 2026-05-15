@@ -1,0 +1,167 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../../lib/utils';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  eyebrow: string;
+}
+
+const { entry, eyebrow } = Astro.props;
+const {
+  title,
+  summary,
+  status,
+  tech,
+  repo,
+  demo,
+  docs,
+  startDate,
+  updatedDate,
+  highlights,
+} = entry.data;
+---
+<header class="detail-header">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1 class="title">{title}</h1>
+  <p class="summary">{summary}</p>
+
+  <dl class="meta">
+    <div>
+      <dt>Status</dt>
+      <dd><span data-status={status}>{status}</span></dd>
+    </div>
+    <div>
+      <dt>Since</dt>
+      <dd>{formatDate(startDate)}</dd>
+    </div>
+    {updatedDate && (
+      <div>
+        <dt>Updated</dt>
+        <dd>{formatDate(updatedDate)}</dd>
+      </div>
+    )}
+    {tech.length > 0 && (
+      <div class="tech">
+        <dt>Tech</dt>
+        <dd>{tech.join(' · ')}</dd>
+      </div>
+    )}
+  </dl>
+
+  {(repo || demo || docs) && (
+    <ul class="link-bar" aria-label="External links">
+      {repo && <li><a href={repo} rel="noopener" target="_blank">Repo →</a></li>}
+      {demo && <li><a href={demo} rel="noopener" target="_blank">Demo →</a></li>}
+      {docs && <li><a href={docs} rel="noopener" target="_blank">Docs →</a></li>}
+    </ul>
+  )}
+
+  {highlights && highlights.length > 0 && (
+    <ul class="highlights">
+      {highlights.map((h) => <li>{h}</li>)}
+    </ul>
+  )}
+</header>
+
+<style>
+  .detail-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 0.5px solid var(--color-border);
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0 0 0.75rem 0;
+  }
+  .title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--color-text-primary);
+    margin: 0 0 0.75rem 0;
+  }
+  .summary {
+    font-family: var(--font-display);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    margin: 0 0 1.5rem 0;
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem 1.5rem;
+    margin: 1.5rem 0 0 0;
+    padding: 0;
+  }
+  .meta div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .meta div.tech {
+    grid-column: 1 / -1;
+  }
+  .meta dt {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin: 0;
+  }
+  .meta dd {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  .meta [data-status='active'] {
+    color: var(--color-accent);
+  }
+
+  .link-bar {
+    list-style: none;
+    margin: 1.5rem 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .link-bar a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--color-border);
+    padding-bottom: 2px;
+    transition: color 0.15s ease-out, border-color 0.15s ease-out;
+  }
+  .link-bar a:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .highlights {
+    list-style: disc;
+    margin: 1.25rem 0 0 1.25rem;
+    padding: 0;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .highlights li::marker {
+    color: var(--color-text-tertiary);
+  }
+</style>
