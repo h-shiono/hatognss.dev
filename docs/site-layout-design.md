@@ -251,7 +251,17 @@ Already implemented per `docs/atlas-design.md`. Wrap with BaseLayout. Map conten
 
 ### About (`/about/`)
 
-Editorial prose. Single column, max-width 640px. Fraunces body. Section labels as needed.
+Editorial prose introducing hato.GNSS. Sections:
+- Who · 自己紹介
+- What I'm thinking about
+- Side projects · 寄り道 (lists projects where category === 'hobby')
+- Colophon · 製作
+- Contact
+
+Uses ArticleLayout with max-width 640px.
+
+Projects with `category: 'hobby'` are rendered as a small list here, 
+NOT under /oss/ or /works/. Each entry links externally to its own site/repo.
 
 ## 9. Footer
 
