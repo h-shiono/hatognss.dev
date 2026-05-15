@@ -1,12 +1,12 @@
 ---
-title: "MRTKLIB"
+title: "soopex"
 category: oss
 status: active
-summary: "Maintained fork / extension of RTKLIB. Placeholder summary — replace."
+summary: ""
 tech: ["C"]
 tags: ["GNSS", "RTK", "PPP"]
 featured: true
-startDate: 2026-02-23
+startDate: 2026-04-19
 ---
 
 <!-- Project description. Fill in or replace. -->

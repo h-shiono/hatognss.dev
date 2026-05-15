@@ -8,9 +8,9 @@ export const SITE = {
 
 // Fill in handles/URLs before launch.
 export const SOCIAL = {
-  github: '',
-  zenn: '',
-  x: '',
+  github: 'https://github.com/h-shiono',
+  zenn: 'https://zenn.dev/hatognss',
+  x: 'https://x.com/HatoGnss',
   researchgate: '',
   email: '',
 } as const;

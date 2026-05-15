@@ -6,7 +6,7 @@ summary: "QZSS CLAS summary dashboard. Placeholder summary — replace."
 tech: []
 tags: ["QZSS", "CLAS"]
 featured: false
-startDate: 2025-01-01
+startDate: 2026-04-08
 ---
 
 <!-- Project description. Fill in or replace. -->
