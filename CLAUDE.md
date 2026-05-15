@@ -90,7 +90,8 @@ Defined in `src/content/config.ts`. **All schema changes require updating this f
   abstract: string,
   tags: string[],                 // ["PPP-RTK", "QZSS CLAS", ...]
   featured?: boolean,             // show on homepage
-  date: Date                      // publication or acceptance date
+  date: Date,                     // publication or acceptance date
+  presented_at?: Reference<'talks'>  // optional cross-link to the talk that presented this work
 }
 ```
 
@@ -117,11 +118,18 @@ Defined in `src/content/config.ts`. **All schema changes require updating this f
   slides_url?: string,            // GitHub Pages URL or PDF link
   slides_pdf?: string,            // path in /public/pdfs/
   video_url?: string,
+  url?: string,                   // event/conference page URL
   abstract: string,
   tags: string[],
-  featured?: boolean
+  featured?: boolean,
+  lat?: number,                   // venue latitude (decimal degrees, for Atlas)
+  lng?: number,                   // venue longitude (decimal degrees, for Atlas)
+  thumbnail?: ImageMetadata,      // venue/city photo, collocated as ./photo.jpg
+  related_publication?: Reference<'publications'>  // optional cross-link to the paper this talk presented
 }
 ```
+
+**Cross-references**: When a talk presents a paper, set `related_publication` on the talk AND `presented_at` on the paper, pointing at each other's slug. The detail pages render the back-link in both directions.
 
 ### `projects` collection
 
@@ -310,5 +318,5 @@ This `CLAUDE.md` is itself a tracked artifact. Update version and date at the bo
 
 ---
 
-**Version**: 0.3 (layered identity model — hato.GNSS as primary surface)
+**Version**: 0.4 (talks ↔ publications cross-references; talks gain `url`, `lat`/`lng`, `thumbnail`)
 **Last updated**: 2026-05-15

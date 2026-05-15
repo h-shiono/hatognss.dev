@@ -1,5 +1,5 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { formatDate } from '../../../lib/utils';
 
@@ -11,7 +11,22 @@ export async function getStaticPaths() {
 interface Props { entry: CollectionEntry<'publications'>; }
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-const { title, authors, venue, year, status, doi, url, pdf, abstract, date, tags } = entry.data;
+const {
+  title,
+  authors,
+  venue,
+  year,
+  status,
+  doi,
+  url,
+  pdf,
+  abstract,
+  date,
+  tags,
+  presented_at,
+} = entry.data;
+
+const presentedAt = presented_at ? await getEntry(presented_at) : undefined;
 ---
 <BaseLayout title={title} description={abstract}>
   <article class="detail">
@@ -44,6 +59,20 @@ const { title, authors, venue, year, status, doi, url, pdf, abstract, date, tags
         <ul class="tags" aria-label="Tags">
           {tags.map((t) => <li>{t}</li>)}
         </ul>
+      )}
+
+      {presentedAt && (
+        <aside class="related" aria-label="Presented at">
+          <p class="related-label">Presented at</p>
+          <a class="related-link" href={`/research/talks/${presentedAt.slug}/`}>
+            <span class="related-title">{presentedAt.data.title}</span>
+            <span class="related-meta">
+              {presentedAt.data.event}
+              {presentedAt.data.location && <> · {presentedAt.data.location}</>}
+              <> · <time datetime={presentedAt.data.date.toISOString()}>{formatDate(presentedAt.data.date)}</time></>
+            </span>
+          </a>
+        </aside>
       )}
     </header>
 
@@ -159,6 +188,46 @@ const { title, authors, venue, year, status, doi, url, pdf, abstract, date, tags
   .tags li {
     font-family: var(--font-mono);
     font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+  .related {
+    margin: 1.5rem 0 0 0;
+    padding: 1rem 1.25rem;
+    border: 0.5px solid var(--color-border);
+    border-radius: 4px;
+    background: transparent;
+  }
+  .related-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin: 0 0 0.5rem 0;
+  }
+  .related-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .related-link:hover {
+    text-decoration: none;
+  }
+  .related-link:hover .related-title {
+    color: var(--color-accent);
+  }
+  .related-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    transition: color 0.15s ease-out;
+  }
+  .related-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--color-text-secondary);
   }
   .abstract {

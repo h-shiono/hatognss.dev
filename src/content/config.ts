@@ -1,4 +1,4 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, reference, z } from 'astro:content';
 
 const publications = defineCollection({
   type: 'content',
@@ -21,6 +21,7 @@ const publications = defineCollection({
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     date: z.date(),
+    presented_at: reference('talks').optional(),
   }),
 });
 
@@ -36,12 +37,14 @@ const talks = defineCollection({
       slides_url: z.string().url().optional(),
       slides_pdf: z.string().optional(),
       video_url: z.string().url().optional(),
+      url: z.string().url().optional(),
       abstract: z.string(),
       tags: z.array(z.string()).default([]),
       featured: z.boolean().default(false),
       lat: z.number().min(-90).max(90).optional(),
       lng: z.number().min(-180).max(180).optional(),
       thumbnail: image().optional(),
+      related_publication: reference('publications').optional(),
     }),
 });
 

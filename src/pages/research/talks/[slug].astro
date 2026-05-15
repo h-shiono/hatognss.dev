@@ -1,5 +1,5 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import InsetMap from '../../../components/atlas/InsetMap.astro';
 import { formatDate } from '../../../lib/utils';
@@ -21,11 +21,17 @@ const {
   slides_url,
   slides_pdf,
   video_url,
+  url,
   abstract,
   tags,
   lat,
   lng,
+  related_publication,
 } = entry.data;
+
+const relatedPublication = related_publication
+  ? await getEntry(related_publication)
+  : undefined;
 ---
 <BaseLayout title={title} description={abstract}>
   <article class="detail">
@@ -48,12 +54,25 @@ const {
         </div>
       </dl>
 
-      {(slides_url || slides_pdf || video_url) && (
+      {(slides_url || slides_pdf || video_url || url) && (
         <ul class="link-bar" aria-label="Talk materials">
           {slides_url && <li><a href={slides_url} rel="noopener" target="_blank">Slides →</a></li>}
           {slides_pdf && <li><a href={slides_pdf} rel="noopener" target="_blank">PDF →</a></li>}
           {video_url && <li><a href={video_url} rel="noopener" target="_blank">Video →</a></li>}
+          {url && <li><a href={url} rel="noopener" target="_blank">Event →</a></li>}
         </ul>
+      )}
+
+      {relatedPublication && (
+        <aside class="related" aria-label="Related publication">
+          <p class="related-label">Related publication</p>
+          <a class="related-link" href={`/research/publications/${relatedPublication.slug}/`}>
+            <span class="related-title">{relatedPublication.data.title}</span>
+            <span class="related-meta">
+              <em>{relatedPublication.data.venue}</em>, {relatedPublication.data.year}
+            </span>
+          </a>
+        </aside>
       )}
 
       {tags.length > 0 && (
@@ -176,6 +195,48 @@ const {
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--color-text-secondary);
+  }
+  .related {
+    margin: 1.5rem 0 0 0;
+    padding: 1rem 1.25rem;
+    border: 0.5px solid var(--color-border);
+    border-radius: 4px;
+    background: transparent;
+  }
+  .related-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin: 0 0 0.5rem 0;
+  }
+  .related-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .related-link:hover {
+    text-decoration: none;
+  }
+  .related-link:hover .related-title {
+    color: var(--color-accent);
+  }
+  .related-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    transition: color 0.15s ease-out;
+  }
+  .related-meta {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+  .related-meta em {
+    font-style: italic;
   }
   .map-wrap {
     margin: 0 0 2.5rem 0;
