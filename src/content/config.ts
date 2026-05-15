@@ -26,19 +26,23 @@ const publications = defineCollection({
 
 const talks = defineCollection({
   type: 'content',
-  schema: z.object({
-    title: z.string(),
-    event: z.string(),
-    date: z.date(),
-    location: z.string().optional(),
-    type: z.enum(['invited', 'oral', 'poster', 'tutorial', 'seminar']),
-    slides_url: z.string().url().optional(),
-    slides_pdf: z.string().optional(),
-    video_url: z.string().url().optional(),
-    abstract: z.string(),
-    tags: z.array(z.string()).default([]),
-    featured: z.boolean().default(false),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      event: z.string(),
+      date: z.date(),
+      location: z.string().optional(),
+      type: z.enum(['invited', 'oral', 'poster', 'tutorial', 'seminar']),
+      slides_url: z.string().url().optional(),
+      slides_pdf: z.string().optional(),
+      video_url: z.string().url().optional(),
+      abstract: z.string(),
+      tags: z.array(z.string()).default([]),
+      featured: z.boolean().default(false),
+      lat: z.number().min(-90).max(90).optional(),
+      lng: z.number().min(-180).max(180).optional(),
+      thumbnail: image().optional(),
+    }),
 });
 
 const projects = defineCollection({

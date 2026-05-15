@@ -1,14 +1,33 @@
 @import "tailwindcss";
 
 /*
- * Theme tokens. See CLAUDE.md §7 for direction.
- * - Restrained palette: monochrome base + one accent. No more than 3 hues.
- * - Typography pairing TBD (confirm with user before installing fonts).
+ * Almanac theme tokens. See docs/atlas-design.md §6 for aesthetic direction.
+ *
+ * - Warm off-white in light mode, deep ink in dark mode.
+ * - Single muted accent: antique brass.
+ * - Numerals + coordinates render in --font-mono.
+ *
+ * Light is the @theme default. [data-theme="dark"] overrides on the same names
+ * so utilities like `text-accent` or `bg-background-secondary` auto-switch.
  */
 @theme {
-  /* --color-accent: ... */
-  /* --font-display: ... */
-  /* --font-body: ... */
+  --color-accent: #854F0B;
+  --color-background: #FAF7F2;
+  --color-background-secondary: #F0EAE0;
+  --color-border-tertiary: #D9CFC0;
+  --color-foreground: #1A1A1A;
+  --color-foreground-muted: #6B6B6B;
+
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+[data-theme="dark"] {
+  --color-accent: #EF9F27;
+  --color-background: #14110D;
+  --color-background-secondary: #1F1A14;
+  --color-border-tertiary: #3A3128;
+  --color-foreground: #F5F0E8;
+  --color-foreground-muted: #A39988;
 }
 
 :root {
@@ -17,4 +36,10 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
 }
