@@ -1,0 +1,99 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  talks: CollectionEntry<'talks'>[];
+}
+
+const { talks } = Astro.props;
+
+const sorted = [...talks].sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const fmt = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  year: 'numeric',
+});
+
+function formatYearMonth(d: Date): string {
+  return fmt.format(d);
+}
+---
+
+<ul class="atlas-list">
+  {sorted.map((t) => (
+    <li class="atlas-list-row">
+      <a
+        href={`/research/talks/${t.slug}/`}
+        data-atlas-id={t.slug}
+        class="atlas-list-link"
+      >
+        <span class="atlas-list-date">{formatYearMonth(t.data.date)}</span>
+        <span class="atlas-list-main">
+          <span class="atlas-list-title">{t.data.title}</span>
+          <span class="atlas-list-venue">{t.data.event}</span>
+        </span>
+        <span class="atlas-list-location">{t.data.location ?? '—'}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .atlas-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .atlas-list-row {
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .atlas-list-link {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+    padding: 10px 12px;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.15s ease-out;
+  }
+
+  .atlas-list-link:hover,
+  .atlas-list-link[data-atlas-hovered] {
+    background-color: var(--color-background-secondary);
+  }
+
+  .atlas-list-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-foreground-muted);
+  }
+
+  .atlas-list-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .atlas-list-title {
+    font-size: 14px;
+    color: var(--color-foreground);
+  }
+
+  .atlas-list-venue {
+    font-size: 12px;
+    color: var(--color-foreground-muted);
+  }
+
+  .atlas-list-location {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-foreground-muted);
+    text-align: right;
+  }
+</style>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TalkTooltip from './TalkTooltip';
 
 export interface AtlasMarker {
@@ -29,7 +29,42 @@ export default function AtlasMap({
   height,
   markers,
 }: AtlasMapProps) {
-  const [hovered, setHovered] = useState<AtlasMarker | null>(null);
+  // `hoveredSlug` highlights the marker (set from either map or list hover).
+  // `tooltipMarker` shows the tooltip — set only from marker hover, per
+  // docs/atlas-design.md §7 "Hover list row → highlight marker, but no tooltip".
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [tooltipMarker, setTooltipMarker] = useState<AtlasMarker | null>(null);
+
+  // Map → List: reflect hover state onto list rows via data attribute.
+  useEffect(() => {
+    const rows = document.querySelectorAll<HTMLElement>('[data-atlas-id]');
+    rows.forEach((row) => {
+      if (row.dataset.atlasId === hoveredSlug) {
+        row.dataset.atlasHovered = 'true';
+      } else {
+        delete row.dataset.atlasHovered;
+      }
+    });
+  }, [hoveredSlug]);
+
+  // List → Map: subscribe to hover on list rows so markers grow without tooltip.
+  useEffect(() => {
+    const rows = document.querySelectorAll<HTMLElement>('[data-atlas-id]');
+    const cleanups: Array<() => void> = [];
+    rows.forEach((row) => {
+      const slug = row.dataset.atlasId;
+      if (!slug) return;
+      const enter = () => setHoveredSlug(slug);
+      const leave = () => setHoveredSlug(null);
+      row.addEventListener('mouseenter', enter);
+      row.addEventListener('mouseleave', leave);
+      cleanups.push(() => {
+        row.removeEventListener('mouseenter', enter);
+        row.removeEventListener('mouseleave', leave);
+      });
+    });
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <div style={{ position: 'relative' }}>
@@ -55,7 +90,7 @@ export default function AtlasMap({
           strokeWidth={0.5}
         />
         {markers.map((m) => {
-          const isHovered = hovered?.slug === m.slug;
+          const isHovered = hoveredSlug === m.slug;
           return (
             <a
               key={m.slug}
@@ -69,8 +104,14 @@ export default function AtlasMap({
                 fill="var(--color-accent)"
                 stroke="var(--color-background)"
                 strokeWidth={1.5}
-                onMouseEnter={() => setHovered(m)}
-                onMouseLeave={() => setHovered(null)}
+                onMouseEnter={() => {
+                  setHoveredSlug(m.slug);
+                  setTooltipMarker(m);
+                }}
+                onMouseLeave={() => {
+                  setHoveredSlug(null);
+                  setTooltipMarker(null);
+                }}
                 style={{
                   cursor: 'pointer',
                   transition: 'r 0.15s ease-out',
@@ -80,9 +121,9 @@ export default function AtlasMap({
           );
         })}
       </svg>
-      {hovered && (
+      {tooltipMarker && (
         <TalkTooltip
-          marker={hovered}
+          marker={tooltipMarker}
           containerWidth={width}
           containerHeight={height}
         />
