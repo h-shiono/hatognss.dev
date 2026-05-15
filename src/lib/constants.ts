@@ -1,6 +1,6 @@
 export const SITE = {
   title: 'hato.GNSS',
-  description: 'Independent GNSS researcher · OSS maintainer',
+  description: 'GNSS researcher · OSS maintainer',
   url: 'https://hatognss.dev',
   author: 'hato.GNSS',
   locale: 'en',

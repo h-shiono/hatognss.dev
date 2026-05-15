@@ -1,6 +1,6 @@
 # hatognss.dev
 
-Personal hub site for **hato.GNSS** — independent GNSS researcher and OSS maintainer.
+Personal hub site for **hato.GNSS** — GNSS researcher and OSS maintainer.
 
 Built with [Astro](https://astro.build/) (static-first, Islands Architecture), TypeScript strict, and Tailwind CSS v4.
 
