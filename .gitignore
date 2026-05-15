@@ -35,6 +35,9 @@ todo.md
 lessons.md
 .claude/
 
+# Personal prompts and working tools (NEVER COMMIT)
+docs/prompts/
+
 # Local working memory and scratch
 scratch/
 notes/
