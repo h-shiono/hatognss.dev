@@ -32,6 +32,12 @@ const {
 const relatedPublication = related_publication
   ? await getEntry(related_publication)
   : undefined;
+
+if (related_publication && !relatedPublication) {
+  throw new Error(
+    `talk "${entry.slug}" has related_publication: "${related_publication.id}" but no such publication exists. Check the slug in src/content/publications/.`,
+  );
+}
 ---
 <BaseLayout title={title} description={abstract}>
   <article class="detail">

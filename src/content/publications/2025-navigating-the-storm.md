@@ -13,7 +13,7 @@ abstract: |
     We discuss the implications for system resilience and propose remedies for next-generation PPP/PPP-RTK services, including enhanced frame alignment and adaptive switching mechanisms.
 tags: ["QZSS", "CLAS", "Ionosphere", "Vulnerability"]
 url: "https://navi.ion.org/content/73/1/navi.762"
-presented_at: "2025-09-iongnss-storm"
+presented_at: "2025-09-iongnss-baltimore"
 featured: false
 date: 2026-04-25
 ---
