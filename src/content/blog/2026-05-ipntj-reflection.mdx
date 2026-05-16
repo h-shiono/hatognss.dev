@@ -36,9 +36,11 @@ import cover from '../../assets/slides/mrtklib-intro-cover.png';
 
 Issue: [[Feature] Provide a non-Docker distribution channel (Windows / macOS desktop app)](https://github.com/h-shiono/MRTKLIB/issues/114)
 
-Docker 以外の入り口を検討していないか (e.g. Jupyterlab) ？というご質問がありました。
-また、ご質問をいただいた方以外にも「Docker を勉強しながら使おうとしてみています」との声をいただき、自分が慣れているという意味で Docker を捉えていたなとハッとさせられました。
+Docker 以外の入り口を検討していないか (e.g. JupyterLab) ？というご質問がありました。
+ご質問をいただいた方以外にも「Docker を勉強しながら使おうとしてみています」との声をいただき、Docker は自分にとって慣れているツールなだけであって、皆がそうではないとハッとさせられました。
+
 どのような形態にするかは色々検討したいと思いますが、あまりメンテナンスコストを上げるような方向にはしたくないと考えています。
+一番望ましい形としては、 mrtklib-docker-ui をどこかにホスティングして直接 Web UI をブラウザ経由で触っていただく方法だと思うのですが、ホスティングして管理するのが結構大変だと考えています。
 今できそうかな？と考えているのは mrtklib-docker-ui をほぼそのまま流用する形で Windows App や Mac App にする方法です。
 
 ### GitHub 以外の連絡手段について
