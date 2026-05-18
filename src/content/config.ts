@@ -7,6 +7,14 @@ const publications = defineCollection({
     authors: z.array(z.string()),
     venue: z.string(),
     year: z.number().int(),
+    type: z.enum([
+      'journal',
+      'conference',
+      'popular',
+      'preprint',
+      'thesis',
+      'other',
+    ]),
     status: z.enum([
       'published',
       'accepted',
@@ -21,6 +29,10 @@ const publications = defineCollection({
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     date: z.date(),
+    issue: z.string().optional(),
+    pages: z.string().optional(),
+    notes: z.string().optional(),
+    republished_in: z.string().optional(),
     presented_at: reference('talks').optional(),
   }),
 });

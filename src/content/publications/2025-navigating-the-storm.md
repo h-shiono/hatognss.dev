@@ -4,6 +4,7 @@ authors: ["H.
 Shiono"]
 venue: "Navigation"
 year: 2026
+type: journal
 status: published
 abstract: |
     This paper presents the first multi-year, nationwide diagnostic analysis of the Quasi-Zenith Satellite System Centimeter Level Augmentation Service (CLAS) precise point positioning (PPP) real-time kinematic (RTK) service, spanning the rise, peak (late 2024 to mid-2025), and initial decline of Solar Cycle 25.

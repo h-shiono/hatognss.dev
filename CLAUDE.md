@@ -81,16 +81,21 @@ Defined in `src/content/config.ts`. **All schema changes require updating this f
 {
   title: string,
   authors: string[],              // ["H. Shiono", "N. Kubo"]  — use published author format
-  venue: string,                  // "NAVIGATION" | "ION GNSS+ 2025" | ...
+  venue: string,                  // "NAVIGATION" | "ION GNSS+ 2025" | "トランジスタ技術" | ...
   year: number,
+  type: 'journal' | 'conference' | 'popular' | 'preprint' | 'thesis' | 'other',  // required
   status: 'published' | 'accepted' | 'submitted' | 'in-revision' | 'in-prep',
   doi?: string,
-  url?: string,                   // external link (journal, conference)
+  url?: string,                   // external link (journal, conference, publisher page)
   pdf?: string,                   // path in /public/pdfs/ or external URL
   abstract: string,
   tags: string[],                 // ["PPP-RTK", "QZSS CLAS", ...]
   featured?: boolean,             // show on homepage
   date: Date,                     // publication or acceptance date
+  issue?: string,                 // "2020年5月号" — magazine/popular issue label
+  pages?: string,                 // "pp. 78-85"
+  notes?: string,                 // free-form editorial notes (e.g., republication history)
+  republished_in?: string,        // e.g., "トランジスタ技術 測位特集（2021年X月）"
   presented_at?: Reference<'talks'>  // optional cross-link to the talk that presented this work
 }
 ```
@@ -105,6 +110,16 @@ Defined in `src/content/config.ts`. **All schema changes require updating this f
 - `in-prep` — actively drafting (show only if user explicitly opts in)
 
 **Do not invent statuses.** When uncertain, ask.
+
+**Type semantics:**
+- `journal` — peer-reviewed journal article
+- `conference` — peer-reviewed conference paper
+- `popular` — popular/professional writing (magazine columns, technical book chapters, etc.) that translates work for an audience beyond the academic community
+- `preprint` — arXiv/SSRN-style preprint
+- `thesis` — degree thesis
+- `other` — anything not covered above; use sparingly
+
+Choose `type` based on the **venue's editorial model**, not the topic. A GNSS-themed article in トランジスタ技術 is `popular` even if the subject matter overlaps with a journal paper.
 
 ### `talks` collection
 
@@ -318,5 +333,5 @@ This `CLAUDE.md` is itself a tracked artifact. Update version and date at the bo
 
 ---
 
-**Version**: 0.4 (talks ↔ publications cross-references; talks gain `url`, `lat`/`lng`, `thumbnail`)
-**Last updated**: 2026-05-15
+**Version**: 0.5 (publications schema: added `type`, `issue`, `pages`, `notes`, `republished_in`; `magazine` renamed to `popular`)
+**Last updated**: 2026-05-18

@@ -1,7 +1,7 @@
 # Site Layout — Design Memo
 
 > Status: **Approved for v0.1 implementation**
-> Last updated: 2026-05-15
+> Last updated: 2026-05-18
 > Audience: implementers (Hayato, Claude Code, future contributors)
 > Companion: [`docs/prompts/site-layout-implementation.md`](./prompts/site-layout-implementation.md)
 > Related: [`docs/atlas-design.md`](./atlas-design.md)
@@ -221,7 +221,9 @@ releases, and blog posts. Auto-generated from Content Collections.
 
 Single page combining publications and talks, **divided by year**. Each year has subsections for Publications and Talks within it.
 
-Future alternative: split into `/research/publications/` and `/research/talks/` if either grows beyond ~30 items. For v0.1, combined view.
+Publications display a `type` marker in parentheses at the end of the meta line — e.g., `H. Shiono · Navigation · (journal)` — to distinguish journal / conference / popular / preprint / thesis at a glance. Year grouping remains the primary axis; type is a secondary visual cue, not a grouping dimension.
+
+Future alternative: when publications exceed ~30 items, reconsider grouping by `type` (Journal / Conference / Popular / ...) instead of year, and split into `/research/publications/` and `/research/talks/` if either side grows large.
 
 ### OSS (`/oss/`)
 
@@ -398,6 +400,9 @@ Import in `src/styles/fonts.css` (loaded by BaseLayout):
 | 2026-05-15 | All nav items visible on mobile | 5 mono 11px items fit even on 320px |
 | 2026-05-15 | View Transitions enabled | Smooth nav reinforces "single publication" feel |
 | 2026-05-15 | Antique brass accent (#854F0B / #EF9F27) | Consistent with Atlas accent; warm-restrained |
+| 2026-05-18 | Publications schema extended (`type`, `issue`, `pages`, `notes`, `republished_in`) | Support popular-press writing (magazine columns, technical book chapters) alongside journal/conference output |
+| 2026-05-18 | `type` value `magazine` renamed to `popular` | Encompass future technical-book contributions and other writing aimed beyond the specialist community, not just magazine columns |
+| 2026-05-18 | Research list keeps year grouping; `type` shown as meta marker | Year remains primary chronological axis; reconsider grouping by `type` when publications exceed ~30 items |
 
 ---
 
