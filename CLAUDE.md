@@ -96,9 +96,24 @@ Defined in `src/content/config.ts`. **All schema changes require updating this f
   pages?: string,                 // "pp. 78-85"
   notes?: string,                 // free-form editorial notes (e.g., republication history)
   republished_in?: string,        // e.g., "トランジスタ技術 測位特集（2021年X月）"
-  presented_at?: Reference<'talks'>  // optional cross-link to the talk that presented this work
+  presented_at?: Reference<'talks'>,  // optional cross-link to the talk that presented this work
+  awards?: Award[]                // see Award shape below
 }
 ```
+
+**Award shape** (shared between `publications` and `talks`):
+
+```ts
+{
+  name: string,                   // "Student Paper Award"
+  venue?: string,                 // "Pacific PNT 2026"
+  year: number,
+  url?: string,                   // external announcement (e.g., university PR)
+  type?: 'paper' | 'presentation' | 'other'
+}
+```
+
+**Awards convention**: Awards are recorded on whichever entry best represents the awarded work. For a conference paper that won a best-paper award, attach the award to the `publications` entry if one exists; otherwise attach it to the corresponding `talks` entry. The detail pages render a one-line, accent-colored strip directly under the venue/event line. The About page's `Awards · 受賞` section aggregates awards from both collections, grouped by year. This section is scoped strictly to awards/honors; media mentions or external features should be modeled separately if introduced later, not folded in here.
 
 **Author field rule**: Use the format as published. Do NOT modify or expand author names to forms that differ from the citation record. When uncertain about the published format, ask the user.
 
@@ -140,7 +155,8 @@ Choose `type` based on the **venue's editorial model**, not the topic. A GNSS-th
   lat?: number,                   // venue latitude (decimal degrees, for Atlas)
   lng?: number,                   // venue longitude (decimal degrees, for Atlas)
   thumbnail?: ImageMetadata,      // venue/city photo, collocated as ./photo.jpg
-  related_publication?: Reference<'publications'>  // optional cross-link to the paper this talk presented
+  related_publication?: Reference<'publications'>,  // optional cross-link to the paper this talk presented
+  awards?: Award[]                // see Award shape in publications section
 }
 ```
 
@@ -333,5 +349,5 @@ This `CLAUDE.md` is itself a tracked artifact. Update version and date at the bo
 
 ---
 
-**Version**: 0.5 (publications schema: added `type`, `issue`, `pages`, `notes`, `republished_in`; `magazine` renamed to `popular`)
+**Version**: 0.6 (added `awards` field to publications and talks schemas; About page Recognition section)
 **Last updated**: 2026-05-18

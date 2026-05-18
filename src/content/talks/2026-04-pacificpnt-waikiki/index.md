@@ -18,6 +18,12 @@ featured: false
 lat: 21.2766
 lng: -157.8267
 thumbnail: ./photo.jpg
+awards:
+  - name: "Student Paper Award"
+    venue: "Pacific PNT 2026"
+    year: 2026
+    type: paper
+    url: https://www.kaiyodai.ac.jp/en/faculty/graduate/news/detail/pacific_pnt2026.html
 ---
 
 <!-- Body content. Fill in or replace. -->

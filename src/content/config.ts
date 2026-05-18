@@ -1,5 +1,13 @@
 import { defineCollection, reference, z } from 'astro:content';
 
+const award = z.object({
+  name: z.string(),
+  venue: z.string().optional(),
+  year: z.number().int(),
+  url: z.string().url().optional(),
+  type: z.enum(['paper', 'presentation', 'other']).optional(),
+});
+
 const publications = defineCollection({
   type: 'content',
   schema: z.object({
@@ -34,6 +42,7 @@ const publications = defineCollection({
     notes: z.string().optional(),
     republished_in: z.string().optional(),
     presented_at: reference('talks').optional(),
+    awards: z.array(award).optional(),
   }),
 });
 
@@ -57,6 +66,7 @@ const talks = defineCollection({
       lng: z.number().min(-180).max(180).optional(),
       thumbnail: image().optional(),
       related_publication: reference('publications').optional(),
+      awards: z.array(award).optional(),
     }),
 });
 

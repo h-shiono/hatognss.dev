@@ -8,6 +8,51 @@ const hobbies = (await getCollection('projects', (e) => e.data.category === 'hob
       (b.data.updatedDate ?? b.data.startDate).getTime() -
       (a.data.updatedDate ?? a.data.startDate).getTime(),
   );
+
+type RecognitionItem = {
+  year: number;
+  name: string;
+  venue?: string;
+  workTitle: string;
+  workHref: string;
+  url?: string;
+};
+
+const publications = await getCollection('publications');
+const talks = await getCollection('talks');
+
+const recognition: RecognitionItem[] = [];
+for (const p of publications) {
+  for (const a of p.data.awards ?? []) {
+    recognition.push({
+      year: a.year,
+      name: a.name,
+      venue: a.venue,
+      workTitle: p.data.title,
+      workHref: `/research/publications/${p.slug}/`,
+      url: a.url,
+    });
+  }
+}
+for (const t of talks) {
+  for (const a of t.data.awards ?? []) {
+    recognition.push({
+      year: a.year,
+      name: a.name,
+      venue: a.venue,
+      workTitle: t.data.title,
+      workHref: `/research/talks/${t.slug}/`,
+      url: a.url,
+    });
+  }
+}
+
+const recognitionYears = Array.from(new Set(recognition.map((r) => r.year))).sort(
+  (a, b) => b - a,
+);
+const recognitionByYear: Record<number, RecognitionItem[]> = {};
+for (const y of recognitionYears) recognitionByYear[y] = [];
+for (const r of recognition) recognitionByYear[r.year].push(r);
 ---
 <ArticleLayout title="About" description="About hato.GNSS — GNSS researcher and OSS maintainer.">
   <h1>About</h1>
@@ -26,6 +71,38 @@ const hobbies = (await getCollection('projects', (e) => e.data.category === 'hob
   <p>
     Bio copy to be expanded.
   </p>
+
+  {recognitionYears.length > 0 && (
+    <section class="recognition" aria-labelledby="recognition-heading">
+      <h2 id="recognition-heading" class="section-label">
+        <span lang="en">Awards</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span lang="ja">受賞</span>
+      </h2>
+      <ul class="year-list">
+        {recognitionYears.map((y) => (
+          <li class="year-row">
+            <span class="year-num">{y}</span>
+            <ul class="award-list">
+              {recognitionByYear[y].map((r) => (
+                <li class="award-row">
+                  <span class="award-name">{r.name}{r.venue && <>, {r.venue}</>}</span>
+                  <span class="award-work">
+                    — <a href={r.workHref}>{r.workTitle}</a>
+                  </span>
+                  {r.url && (
+                    <span class="award-ext">
+                      <a href={r.url} rel="noopener" target="_blank">Announcement →</a>
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   {hobbies.length > 0 && (
     <section class="side-projects" aria-labelledby="side-projects-heading">
@@ -120,5 +197,70 @@ const hobbies = (await getCollection('projects', (e) => e.data.category === 'hob
   .project-links a:hover {
     color: var(--color-accent);
     text-decoration: none;
+  }
+  .recognition {
+    margin-top: 3rem;
+  }
+  .year-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .year-row {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .year-row .year-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+  }
+  .award-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .award-row {
+    font-family: var(--font-display);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+  }
+  .award-name {
+    color: var(--color-accent);
+  }
+  .award-work {
+    color: var(--color-text-secondary);
+  }
+  .award-work a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border-bottom: 0.5px solid var(--color-border);
+    transition: color 0.15s ease-out, border-color 0.15s ease-out;
+  }
+  .award-work a:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+  .award-ext {
+    margin-left: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .award-ext a {
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+  }
+  .award-ext a:hover {
+    color: var(--color-accent);
   }
 </style>

@@ -27,6 +27,7 @@ const {
   lat,
   lng,
   related_publication,
+  awards,
 } = entry.data;
 
 const relatedPublication = related_publication
@@ -48,6 +49,22 @@ if (related_publication && !relatedPublication) {
         {event}
         {location && <><span class="dot" aria-hidden="true">·</span>{location}</>}
       </p>
+
+      {awards && awards.length > 0 && (
+        <ul class="awards" aria-label="Awards">
+          {awards.map((a) => (
+            <li class="award">
+              {a.url ? (
+                <a href={a.url} rel="noopener" target="_blank">
+                  {a.name}{a.venue && <>, {a.venue}</>} <span aria-hidden="true">→</span>
+                </a>
+              ) : (
+                <>{a.name}{a.venue && <>, {a.venue}</>}</>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
 
       <dl class="meta">
         <div>
@@ -141,6 +158,29 @@ if (related_publication && !relatedPublication) {
   .dot {
     color: var(--color-text-tertiary);
     margin: 0 6px;
+  }
+  .awards {
+    list-style: none;
+    margin: 0.25rem 0 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .award {
+    font-family: var(--font-display);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-accent);
+  }
+  .award a {
+    color: var(--color-accent);
+    text-decoration: none;
+    border-bottom: 0.5px solid transparent;
+    transition: border-color 0.15s ease-out;
+  }
+  .award a:hover {
+    border-bottom-color: var(--color-accent);
   }
   .meta {
     display: grid;
