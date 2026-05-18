@@ -55,7 +55,7 @@ for (const y of years) {
                       <span class="dot" aria-hidden="true">·</span>
                       <em>{p.data.venue}</em>
                       <span class="dot" aria-hidden="true">·</span>
-                      <span class="entry-status">{p.data.status}</span>
+                      <span class="entry-type">({p.data.type})</span>
                     </span>
                   </span>
                 </a>
@@ -165,6 +165,12 @@ for (const y of years) {
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.06em;
+  }
+  .entry-type {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
   }
   .dot {
     margin: 0 6px;
