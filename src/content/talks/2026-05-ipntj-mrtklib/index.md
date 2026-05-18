@@ -14,4 +14,8 @@ lat: 35.6680
 lng: 139.7925
 ---
 
-<!-- Body content. Fill in or replace. -->
+## Updates
+
+**2026-05-15**
+
+[当日の振り返り記事](/blog/2026-05-ipntj-reflection) を公開しました。
