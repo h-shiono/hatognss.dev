@@ -1,0 +1,70 @@
+---
+title: "mrtk post の positioning.mode の見直し"
+description: "測位モードと補正情報プロバイダの関係を整理する"
+date: 2026-05-20
+tags: ["MRTKLIB", "PPP", "PPP-RTK", "MADOCA", "CLAS"]
+draft: false
+featured: false
+language: ja
+---
+
+ここ数ヶ月、Pacific PNT と IPNTJ 全国大会 2026 への登壇でかなりどたばたしていました。4月からは新しい仕事も始まって、なおさらです。
+ようやく少し落ち着いたので ION GNSS+ の原稿に着手することができました。
+
+次の論文ではせっかくなので解析エンジンに MRTKLIB を使おうと考えています。
+MRTKLIB も実装ばかりしていたので、正直なところしっかりと道具として使うのはこれが初めてかもしれません。
+
+そこで一つ気づきがありました。
+それは **「現行 MRTKLIB では IGS files (SP3, CLK, etc.) で PPP 測位できない」** という点です。
+RTKLIB は IGS files (SP3, CLK, etc.) での PPP 測位に対応しています。
+MRTKLIB は **MADOCALIB を取り込んだことで PPP の前提が SSR ベースの補正となりました。**
+実は、今まで整理できていなかった点として、**MRTKLIB では測位モードと補正情報プロバイダが暗黙の了解として結びついてしまっています。**
+
+- **ppp**: MADOCA の補正情報で PPP 測位するモード
+- **ppp-rtk**: CLAS の補正情報で PPP-RTK 測位するモード
+- **vrs-rtk**: CLAS の補正情報から生成した VRS 観測量で VRS-RTK 測位するモード
+
+しかし実際には、
+
+- **ppp**:
+    - MADOCA-PPP
+    - Galileo HAS
+    - BeiDou PPP-B2b
+    - IGS-RTS ほか
+- **ppp-rtk**:
+    - CLAS
+    - SPARTN ほか
+- **vrs-rtk**:
+    - **VRS 方式は本来 RTK の基準局補正量の生成手法であって、それ自体は測位手法ではない。**
+    MRTKLIB の vrs-rtk は CLAS 補正から仮想基準局観測量を生成して RTK で処理する CLAS 専用の実装 (CLASLIB 由来) で、商用 NTRIP の VRS とは別物。
+
+と、それぞれ分類できる（あるいはできない）わけです。
+
+### Issue: [https://github.com/h-shiono/MRTKLIB/issues/130](https://github.com/h-shiono/MRTKLIB/issues/130)
+
+そこで、より正しく MRTKLIB を設計し、さまざまな補正情報を正しく使い分けられるように改修を行います。
+新たに `correction` というキーを追加し、測位モードと補正情報プロバイダを識別できるようにします。
+
+```toml
+[positioning]
+mode       = "ppp-static"   # engine + dynamics (unchanged in Phase 1)
+correction = "igs"          # NEW: correction source (case-insensitive)
+```
+
+**測位モードとcorrectionの対応関係**
+
+| `mode` (engine) | accepted `correction` |
+|-----------------|-----------------------|
+| `ppp-static` / `ppp-kinematic` / `ppp-fixed` | `igs`, `qzs-madoca`, `gal-has`†, `bds-b2b`†, `igs-rts`† |
+| `ppp-rtk` | `qzs-clas` |
+| `vrs-rtk` | `qzs-clas` |
+| `rtk-*` | `none` |
+| `dgps` | `none` |
+| `single` | `none` |
+
+† 将来的に対応予定のある補正情報プロバイダ
+
+これにより、今回のような「PPP 測位をしたいけど MADOCA ではなく IGS プロダクトを使いたい」という時にも、切り替えられるようにします。
+まずは MRTKLIB に早期に実装を行い、mrtklib-docker-ui の対応は MRTKLIB 対応完了後に着手したいと思います。
+
+
