@@ -67,4 +67,7 @@ correction = "igs"          # NEW: correction source (case-insensitive)
 これにより、今回のような「PPP 測位をしたいけど MADOCA ではなく IGS プロダクトを使いたい」という時にも、切り替えられるようにします。
 まずは MRTKLIB に早期に実装を行い、mrtklib-docker-ui の対応は MRTKLIB 対応完了後に着手したいと思います。
 
+**2026-05-25 追記**
 
+RTKLIB は broadcast / precise-files / RTCM-SSR の1フォーマット・1バイアスモデルを仮定していたため、`pos1-sateph` のみで十分でした。
+MRTKLIB が MADOCA-CSSR・CLAS・RTCM-SSR を追加したことで「同一 `sateph`・異なる規約」の衝突が生まれ、それを解くために `correction` 軸が必要になりました。
