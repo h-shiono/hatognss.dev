@@ -42,6 +42,7 @@ MADOCA PPP についても明記されていますが UM980 と全く同じ表�
 |                    | LG580P          | L1, L2, L5, L6      | A?      | A?         | -        | "LG580P (03) supports multi-band signals L1, L2, L5, L6" との記載にとどまり、補強情報利用可否は不明
 |                    | LG680P          | L1, L2, L5, L6      | A       | A?         | -        | PPP-RTK は非対応？ [^8] PPP については記載あり
 | bynav              | M20/M21/M22     | L1, L2, L5, L6 [^9] | A       | A?         | -        | 
+| DATAGNSS           | QZS-6C          | L1, L6              | A       | A          | ✓        | 同社の MA10P/D10P と組み合わせて CLAS/MADOCA 対応可能 [^10]
 
 [^1]: L2C はトラッキングに利用、データ出力は L6 のみ。
 [^2]: `UBX-RXM-QZSSL6` メッセージで u-blox 製モジュールの補正に対応。
@@ -52,6 +53,7 @@ MADOCA PPP についても明記されていますが UM980 と全く同じ表�
 [^7]: [LG290P (03) Hardware Design, Version 1.1, 2024-12-30](https://docs.sparkfun.com/SparkFun_LG290P_Quadband_GNSS_RTK_Breakout/assets/component_documentation/quectel_lg290p03_hardware_design_v1-1.pdf)
 [^8]: "It also supports Galileo E6, QZSS L6, BDS B2b, and L-Band* frequencies for PPP technology." との記載あり。
 [^9]: L6 については "* Optional or check the collection for details" との注釈あり。
+[^10]: "MA-10P/ D10P supports MADOCA/CLAS service with specific firmware too." X にて @rinex20 さんより[情報提供いただきました](https://x.com/rinex20/status/2059506179198640324?s=20)。ありがとうございます。
 
 u-blox の ZED-X20P は今のところ L6 受信ができないようです。
 将来的に FW アップデートで対応することを期待しています。
@@ -95,7 +97,17 @@ Alibaba でクローンボードと見られるものが2万円台中盤で売�
 Teseo L は NEO-D9C と同様に受信機は補強情報のみを受信する仕組みとなっているようで、資料[^10]によると同社の Teseo V と組み合わせて RTK/PPP 測位に対応するようです。
 Teseo V は主に車載用途で使われており、他の受信機のように個人が入手することは困難であるため、上記リストからは外しました。
 
-[^10]: [ST GNSS solution STのGNSSソリューション, For 4th EU-Japan GNSS Roundtable Meeting, March 14th, 2019](https://qzss.go.jp/en/events/2019/pdf/3-7_ST_Motohashi.pdf)
+[^11]: [ST GNSS solution STのGNSSソリューション, For 4th EU-Japan GNSS Roundtable Meeting, March 14th, 2019](https://qzss.go.jp/en/events/2019/pdf/3-7_ST_Motohashi.pdf)
+
+**2026-05-27 追記 その２**
+
+X にてさらに情報提供いただきました。ありがとうございます。
+
+DATAGNSS の QZS-6C は、同社の MA10P/D10P と組み合わせることで CLAS/MADOCA 対応が可能です。
+同社 HP にて、[受信機およびアンテナ一体型として販売](https://www.datagnss.jp/products/qzss-l6-receiver)されています。
+MADOCA 対応の MA-10P-00 が1.4万円、CLAS 対応の MA-10P-CLAS-00 が1.9万円と、CLAS/MADOCA 対応受信機としてはかなり安価で魅力的な選択肢です。
+
+リストが充実してきたので、時間のある時に発売時期や価格、販売状況も含めてまとめられると良いなと思っています。
 
 ### リファレンス
 
@@ -120,3 +132,5 @@ Teseo V は主に車載用途で使われており、他の受信機のように
     - LG680P (03): https://www.quectel.com/product/lg680p-multi-band-gnss-module/
 - bynav:
     - M20/M21/M22: https://www.bynav.com/en/products/gnss-boards/m20m21m22.html
+- DATAGNSS:
+    - QZS-6C: https://docs.datagnss.com/gnss/qzs6c_l6_receiver/
