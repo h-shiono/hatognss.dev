@@ -1,0 +1,91 @@
+---
+title: "QZSS L6 対応受信機まとめ"
+description: "コンシューマーグレードの L6 対応受信機をまとめる（2026年5月版）"
+date: 2026-05-27
+tags: ["QZSS", "L6", "MADOCA", "CLAS", "Receiver"]
+draft: false
+featured: false
+language: ja
+---
+
+残念ながら、先日入手した Unicore UM980 は L6 / MADOCA PPP に非対応でした。
+スペックシートにはどちらも対応が明記されているものの、公式からメールにて非対応との回答がありました。
+
+[遅ればせながら Unicore UM980 を購入 ─ QZSS L6 / MADOCA PPP 対応を調査](https://zenn.dev/hatognss/articles/b9b9af6517a2a2)
+
+メールでは、代わりに UM980C を推奨されました。
+こちらは公式に CLAS PPP-RTK 対応が明記されています。
+MADOCA PPP についても明記されていますが UM980 と全く同じ表記なので、確認が必要かもしれません。
+
+> - Supports QZSS L6D (CLAS) PPP-RTK solution
+> - Supports B2b-PPP, E6-HAS and QZSS L6E (MADOCA) PPP
+
+試したいのですが、今のところボードに実装された状態で販売されているものが見当たりません。
+やはり自分で基板を起こせるようになるべきだろうか...。
+
+下表に、2026年5月現在で入手可能なコンシューマーグレードの L6 対応受信機をまとめました。
+
+**コンシューマーグレード L6 対応受信機**
+
+| Manufacturer | Model           | Band (Spec)         | Raw     | Correction | Verified | Notes
+| ------------ | --------------- | ------------------- | ------- | ---------- | -------- | -----
+| u-blox       | NEO-D9C         | L6 [^1]             | A       | A [^2]     | ✓        | ZED-F9P 等との組み合わせにて利用
+|              | ZED-X20P        | L1, L2, L5, L6      | **N/A** | **N/A**    | ✓        | 2026-05-27 現在 [^3]
+| Septentrio   | mosaic-CLAS     | L1, L2, L6          | A       | A          | ✓        | ワンチップで CLAS/MADOCA 対応
+|              | mosaic-G5 P3    | L1, L2, L5, L6      | A       | **N/A**    | ✓        | Raw データのみ [^4]
+|              | mosaic-G5 P6    | L1, L2, L5, L6      | A       | **N/A**    | -        | Raw データのみ？
+|              | mosaic-G5 P8    | L1, L2, L5, L6      | A       | **N/A**    | -        | Raw データのみ？
+| Unicore      | UM980           | L1, L2, L5, L6      | **N/A** | **N/A**    | ✓        | スペックシートには L6 / MADOCA 対応が明記されているが、公式より非対応との回答あり [^5]
+|              | UM980C          | L1, L2, L5, L6      | A       | A          | -        | 上記問い合わせにて、代わりに UM980C を推奨される [^5] mosaic-CLAS 以外で私が知る限り初のネイティブ対応
+| Allystar     | TAU1302/TAU1303 | L1, L6 [^6]         | A       | **N/A**    | ✓        | 2019年発売と QZSS サービス開始初期から存在するが、現在はディスコン？
+| Quectel      | LG680P (03)     | L1, L2, L5, L6      | A       | A?         | -        | PPP-RTK は非対応？ [^7] PPP については記載あり
+
+[^1]: L2C はトラッキングに利用、データ出力は L6 のみ。
+[^2]: `UBX-RXM-QZSSL6` メッセージで u-blox 製モジュールの補正に対応。
+[^3]: [日記・備考録, 2026/05/24, 高須](https://gpspp.sakura.ne.jp/diary202605.htm)
+[^4]: [L6対応受信機を CLAS 測位対応にする — MRTKLIB v0.6.5 と小型端末レシピ](https://zenn.dev/hatognss/articles/3c102a051af51d)
+[^5]: [遅ればせながら Unicore UM980 を購入 ─ QZSS L6 / MADOCA PPP 対応を調査](https://zenn.dev/hatognss/articles/b9b9af6517a2a2)
+[^6]: Option A: L1 & L5; Option B: L1 & L2; **Option C: L1 & L6**; の3パターンがある。
+[^7]: "It also supports Galileo E6, QZSS L6, BDS B2b, and L-Band* frequencies for PPP technology." との記載あり。
+
+u-blox の ZED-X20P は今のところ L6 受信ができないようです。
+将来的に FW アップデートで対応することを期待しています。
+
+mosaic-G5 [P6](https://www.gpsworld.com/septentrio-extends-gnss-module-family-with-mosaic-g5-p6/), [P8](https://www.gpsworld.com/septentrio-unveils-mosaic-g5-p8-ultra-resilient-gnss-module/) は共に今月発表された最新モジュールで、スペックシート上は L6 対応となっています。
+おそらく mosaic-G5 P3 と同様の Raw データ出力の対応と考えられます。
+
+Allystar は HP のメンテナンス状態が悪く、トップページに紹介されている製品をクリックすると 502 エラーでアクセスできない状態になっています。
+[News](https://www.allystar.com/en/news) を見ると今年の記事があったりするので、企業活動自体は続いているようですが。
+
+TAU1302/TAU1303 以前はボード実装されたものが入手可能でしたが、見かけなくなってしまいました。
+NEO-D9C は ZED-F9P と組み合わせて使うことで CLAS 補正に対応できますが、TAU1302/TAU1303 は単体で L6 Raw データ出力のみなので、製品として存続するのが難しかったのかもしれません。
+まだ入手可能であれば、MRTKLIB と組み合わせて L6 対応受信機として活用したいところです。
+
+Quectel LG680P (03) はスペックシート上は少なくとも MADOCA PPP 対応はしていそうです。
+AliExpress でボード実装されたものが2万円台前半で手に入るので、フルバンド受信機にしてはかなり安価で魅力的な選択肢です。
+ただし、少なくとも CLAS については言及がなく、MADOCA についても "PPP 対応" という書き方で言及されており、実態はよくわかりません。
+
+> It also supports Galileo E6, QZSS L6, BDS B2b, and L-Band* frequencies for PPP technology.
+
+また対応可能性のある受信機が増えてきたら更新します。
+
+
+### リファレンス
+
+- u-blox:
+    - NEO-D9C: https://www.u-blox.com/en/product/neo-d9c-series
+    - ZED-X20P: https://www.u-blox.com/en/product/zed-x20p-module
+- Septentrio:
+    - mosaic-CLAS: https://www.septentrio.com/ja/products/gnss-receivers/gnss-receiver-modules/mosaic-clas
+    - mosaic-G5 P3: https://www.septentrio.com/ja/products/gnss-receivers/gnss-receiver-modules/mosaic-G5-P3
+    - mosaic-G5 P6: https://www.septentrio.com/ja/products/gnss-receivers/gnss-receiver-modules/mosaic-G5-P6
+    - mosaic-G5 P8: モジュール単体の情報は見当たらず、評価キットのみ
+        - 評価キット: https://www.septentrio.com/en/products/gnss-receivers/gnss-receiver-modules/mosaic-go-g5-p8-evaluation-kit
+- Unicore:
+    - UM980: https://en.unicore.com/products/um980/
+    - UM980C: https://en.unicore.com/products/um980c/
+- Allystar: 
+    - TAU1302/TAU1303: 公式ページは 502 エラーでアクセス不可
+        - スペックシート: https://static.maritex.eu/file/display/SgN0eaH8SxLmAa1WYGpd24p2DBSDmgjZ/TAU1303.pdf
+- Quectel:
+    - LG680P (03): https://www.quectel.com/product/lg680p-multi-band-gnss-module/
