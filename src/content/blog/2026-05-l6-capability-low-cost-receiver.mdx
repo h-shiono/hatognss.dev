@@ -27,18 +27,21 @@ MADOCA PPP についても明記されていますが UM980 と全く同じ表�
 
 **コンシューマーグレード L6 対応受信機**
 
-| Manufacturer | Model           | Band (Spec)         | Raw     | Correction | Verified | Notes
-| ------------ | --------------- | ------------------- | ------- | ---------- | -------- | -----
-| u-blox       | NEO-D9C         | L6 [^1]             | A       | A [^2]     | ✓        | ZED-F9P 等との組み合わせにて利用
-|              | ZED-X20P        | L1, L2, L5, L6      | **N/A** | **N/A**    | ✓        | 2026-05-27 現在 [^3]
-| Septentrio   | mosaic-CLAS     | L1, L2, L6          | A       | A          | ✓        | ワンチップで CLAS/MADOCA 対応
-|              | mosaic-G5 P3    | L1, L2, L5, L6      | A       | **N/A**    | ✓        | Raw データのみ [^4]
-|              | mosaic-G5 P6    | L1, L2, L5, L6      | A       | **N/A**    | -        | Raw データのみ？
-|              | mosaic-G5 P8    | L1, L2, L5, L6      | A       | **N/A**    | -        | Raw データのみ？
-| Unicore      | UM980           | L1, L2, L5, L6      | **N/A** | **N/A**    | ✓        | スペックシートには L6 / MADOCA 対応が明記されているが、公式より非対応との回答あり [^5]
-|              | UM980C          | L1, L2, L5, L6      | A       | A          | -        | 上記問い合わせにて、代わりに UM980C を推奨される [^5] mosaic-CLAS 以外で私が知る限り初のネイティブ対応
-| Allystar     | TAU1302/TAU1303 | L1, L6 [^6]         | A       | **N/A**    | ✓        | 2019年発売と QZSS サービス開始初期から存在するが、現在はディスコン？
-| Quectel      | LG680P (03)     | L1, L2, L5, L6      | A       | A?         | -        | PPP-RTK は非対応？ [^7] PPP については記載あり
+| Manufacturer       | Model           | Band (Spec)         | Raw     | Correction | Verified | Notes
+| ------------------ | --------------- | ------------------- | ------- | ---------- | -------- | -----
+| u-blox             | NEO-D9C         | L6 [^1]             | A       | A [^2]     | ✓        | ZED-F9P 等との組み合わせにて利用
+|                    | ZED-X20P        | L1, L2, L5, L6      | **N/A** | **N/A**    | ✓        | 2026-05-27 現在 [^3]
+| Septentrio         | mosaic-CLAS     | L1, L2, L6          | A       | A          | ✓        | ワンチップで CLAS/MADOCA 対応
+|                    | mosaic-G5 P3    | L1, L2, L5, L6      | A       | **N/A**    | ✓        | Raw データのみ [^4]
+|                    | mosaic-G5 P6    | L1, L2, L5, L6      | A       | **N/A**    | -        | Raw データのみ？
+|                    | mosaic-G5 P8    | L1, L2, L5, L6      | A       | **N/A**    | -        | Raw データのみ？
+| Unicore            | UM980           | L1, L2, L5, L6      | **N/A** | **N/A**    | ✓        | スペックシートには L6 / MADOCA 対応が明記されているが、公式より非対応との回答あり [^5]
+|                    | UM980C          | L1, L2, L5, L6      | A       | A          | -        | 上記問い合わせにて、代わりに UM980C を推奨される [^5] mosaic-CLAS 以外で私が知る限り初のネイティブ対応
+| Allystar           | TAU1302/TAU1303 | L1, L6 [^6]         | A       | **N/A**    | ✓        | 2019年発売と QZSS サービス開始初期から存在するが、現在はディスコン？
+| Quectel            | LG290P          | L1, L2, L5          | N/A?    | N/A?       | -        | 対応周波数には L6 の記載がないものの、"Product Features" の "PPP QZSS L6" にチェックが入っている [^7]
+|                    | LG580P          | L1, L2, L5, L6      | A?      | A?         | -        | "LG580P (03) supports multi-band signals L1, L2, L5, L6" との記載にとどまり、補強情報利用可否は不明
+|                    | LG680P          | L1, L2, L5, L6      | A       | A?         | -        | PPP-RTK は非対応？ [^8] PPP については記載あり
+| bynav              | M20/M21/M22     | L1, L2, L5, L6 [^9] | A       | A?         | -        | 
 
 [^1]: L2C はトラッキングに利用、データ出力は L6 のみ。
 [^2]: `UBX-RXM-QZSSL6` メッセージで u-blox 製モジュールの補正に対応。
@@ -46,7 +49,9 @@ MADOCA PPP についても明記されていますが UM980 と全く同じ表�
 [^4]: [L6対応受信機を CLAS 測位対応にする — MRTKLIB v0.6.5 と小型端末レシピ](https://zenn.dev/hatognss/articles/3c102a051af51d)
 [^5]: [遅ればせながら Unicore UM980 を購入 ─ QZSS L6 / MADOCA PPP 対応を調査](https://zenn.dev/hatognss/articles/b9b9af6517a2a2)
 [^6]: Option A: L1 & L5; Option B: L1 & L2; **Option C: L1 & L6**; の3パターンがある。
-[^7]: "It also supports Galileo E6, QZSS L6, BDS B2b, and L-Band* frequencies for PPP technology." との記載あり。
+[^7]: [LG290P (03) Hardware Design, Version 1.1, 2024-12-30](https://docs.sparkfun.com/SparkFun_LG290P_Quadband_GNSS_RTK_Breakout/assets/component_documentation/quectel_lg290p03_hardware_design_v1-1.pdf)
+[^8]: "It also supports Galileo E6, QZSS L6, BDS B2b, and L-Band* frequencies for PPP technology." との記載あり。
+[^9]: L6 については "* Optional or check the collection for details" との注釈あり。
 
 u-blox の ZED-X20P は今のところ L6 受信ができないようです。
 将来的に FW アップデートで対応することを期待しています。
@@ -69,6 +74,28 @@ AliExpress でボード実装されたものが2万円台前半で手に入る�
 
 また対応可能性のある受信機が増えてきたら更新します。
 
+**2026-05-27 追記**
+
+X にて早速、情報提供いただきました。ありがとうございます。
+
+LG290P については、対応周波数に L6 の記載がなかったため列挙していませんでしたが、よくよくスペックシートを見てみると "PPP QZSS L6" にチェックが入っていることに気がつきました。
+これはおそらくですが、Ranging はできないが、補強情報は受信できる、という意味でこのような書き分けになっているのだと推測します。
+一方で、LG580P については対応周波数に L6 を明記しているものの、補強情報に関する記述は見られず、実際に Raw データや補強情報が利用できるのかは不明です。
+
+忘れていたのが bynav の M20/M21/M22 です。
+こちらもスペックシート上では対応周波数に L6 の記載があります。
+しかしながら、"* Optional or check the collection for details" との注釈があり、実際に L6 に対応しているのかは不明です。
+
+Hemisphere の [Phantom™ 40 GNSS OEM Board](https://www.hemispheregnss.com/product/phantom-40-gnss-oem-board) や [Phantom™ 20 & 34 GNSS OEM Boards](https://www.hemispheregnss.com/product/phantom-20-34-gnss-oem-boards) も、スペックシート上では L6 対応となっています。
+しかしながら、信号名が "L6" ではなく "LEX" となっており、これを文字どおり受け取るのであれば、現在は受信できない可能性があります。
+上記リストには記載しなかったのは、この "LEX" が引っかかったのと、Hemisphere の製品がコンシューマグレードか判断がつかなかったためです。
+Alibaba でクローンボードと見られるものが2万円台中盤で売られていますが、実際のところよくわかっていません。
+
+もう一つ、上記リストに記載しなかったものとして STMicroelectronics の Teseo L があります。
+Teseo L は NEO-D9C と同様に受信機は補強情報のみを受信する仕組みとなっているようで、資料[^10]によると同社の Teseo V と組み合わせて RTK/PPP 測位に対応するようです。
+Teseo V は主に車載用途で使われており、他の受信機のように個人が入手することは困難であるため、上記リストからは外しました。
+
+[^10]: [ST GNSS solution STのGNSSソリューション, For 4th EU-Japan GNSS Roundtable Meeting, March 14th, 2019](https://qzss.go.jp/en/events/2019/pdf/3-7_ST_Motohashi.pdf)
 
 ### リファレンス
 
@@ -88,4 +115,8 @@ AliExpress でボード実装されたものが2万円台前半で手に入る�
     - TAU1302/TAU1303: 公式ページは 502 エラーでアクセス不可
         - スペックシート: https://static.maritex.eu/file/display/SgN0eaH8SxLmAa1WYGpd24p2DBSDmgjZ/TAU1303.pdf
 - Quectel:
+    - LG290P (03): https://www.quectel.com/product/gnss-lg290p/
+    - LG580P (03): https://www.quectel.com/product/gnss-lg580p-03/
     - LG680P (03): https://www.quectel.com/product/lg680p-multi-band-gnss-module/
+- bynav:
+    - M20/M21/M22: https://www.bynav.com/en/products/gnss-boards/m20m21m22.html
