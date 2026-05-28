@@ -91,10 +91,15 @@ LG290P については、対応周波数に L6 の記載がなかったため列
 Hemisphere の [Phantom™ 40 GNSS OEM Board](https://www.hemispheregnss.com/product/phantom-40-gnss-oem-board) や [Phantom™ 20 & 34 GNSS OEM Boards](https://www.hemispheregnss.com/product/phantom-20-34-gnss-oem-boards) も、スペックシート上では L6 対応となっています。
 しかしながら、信号名が "L6" ではなく "LEX" となっており、これを文字どおり受け取るのであれば、現在は受信できない可能性があります。
 上記リストには記載しなかったのは、この "LEX" が引っかかったのと、Hemisphere の製品がコンシューマグレードか判断がつかなかったためです。
-Alibaba でクローンボードと見られるものが2万円台中盤で売られていますが、実際のところよくわかっていません。
+Alibaba でクローンボードと見られるものが2万円台中盤で売られています~~が、実際のところよくわかっていません~~。
+**もう少し調べました（下掲）。**
+
+同社の [Vega™ 34 GNSS Compass Board](https://www.hemispheregnss.com/product/vega-34-gnss-compass-board) や [Vega™ 28 GNSS Compass Board](https://www.hemispheregnss.com/product/vega-28-gnss-compass-board) も、スペックシート上では L6 対応となっています（@hal1278 さんより[情報提供いただきました](https://x.com/hal1278/status/2059499013376991504?s=20)、ありがとうございます）。
+さらにこちらは信号名も "L6" となっているため、L6 に対応している可能性が高いと思われます。
+なお、製品グレードについて再度調査してみたところ、正規流通が見積もりベースの Professional OEM であり、個人が定価で購入できる製品ではないため、コンシューマーグレードではないと判断できそうです。
 
 もう一つ、上記リストに記載しなかったものとして STMicroelectronics の Teseo L があります。
-Teseo L は NEO-D9C と同様に受信機は補強情報のみを受信する仕組みとなっているようで、資料[^10]によると同社の Teseo V と組み合わせて RTK/PPP 測位に対応するようです。
+Teseo L は NEO-D9C と同様に受信機は補強情報のみを受信する仕組みとなっているようで、資料[^11]によると同社の Teseo V と組み合わせて RTK/PPP 測位に対応するようです。
 Teseo V は主に車載用途で使われており、他の受信機のように個人が入手することは困難であるため、上記リストからは外しました。
 
 [^11]: [ST GNSS solution STのGNSSソリューション, For 4th EU-Japan GNSS Roundtable Meeting, March 14th, 2019](https://qzss.go.jp/en/events/2019/pdf/3-7_ST_Motohashi.pdf)
