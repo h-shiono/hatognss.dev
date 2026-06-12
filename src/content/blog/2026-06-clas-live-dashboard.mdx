@@ -1,0 +1,65 @@
+---
+title: "MRTKLIB v0.6.14 リリースと CLAS Live ダッシュボードの再開"
+description: "CLAS リアルタイム処理の Bug fix と cssr2rtcm3 の改善"
+date: 2026-06-11
+tags: ["MRTKLIB", "CLAS", "Grafana", "GCP"]
+draft: false
+featured: false
+language: ja
+---
+
+一昨日、MRTKLIB `v0.6.14` をリリースしました。
+
+[Release Notes — v0.6.14](https://h-shiono.github.io/MRTKLIB/releases/release-notes-v0.6.14/)
+
+今回のリリースでは主に CLAS のリアルタイム処理周りの改善を行いました。
+
+## 補強衛星切り替えバグの修正
+
+`mrtk run` にて、補強衛星切り替え時に測位品質が単独測位に落ちて戻らないバグがありました。
+補強衛星の切り替えは主に衛星仰角が閾値以下まで下がった場合に発生します。
+`v0.6.14` ではこれを解消し、補強衛星が切り替わっても単独測位には落ちず、PPP-RTK が継続できるようになりました。
+
+この修正に伴い、[CLAS Live ダッシュボード](https://live.pntmoni.com/)を再開しました。
+このバグの他にも補強情報ストリームの安定性などの問題があったため、しばらく運用を停止していましたが、安定運用の見込みがたったため再開しました。
+
+再開にあたっては、今までのグローバル IP アドレスでの公開から専用ドメイン (`pntmoni.com`) での公開に切り替えました。
+PNT Moni プロジェクトについては、また時期を見てご紹介したいと思います。
+
+## cssr2rtcm3 の精度改善
+
+`cssr2rtcm3` はリアルタイムに QZSS CLAS CSSR を RTCM3 に変換するための機能です。
+この機能を活用することで、「L6 は受信できるけど CLAS 測位には対応していない」という受信機を使って CLAS 測位ができるようになります[^1]。
+
+[^1]: Zenn, [L6対応受信機を CLAS 測位対応にする — MRTKLIB v0.6.5 と小型端末レシピ](https://zenn.dev/hatognss/articles/3c102a051af51d)
+
+しかしながら、性能面では依然課題が残っており、24時間のテストでは Fix 率 72.05% に留まっていました[^2]。
+
+[^2]: MRTKLIB Documentation, CLAS Positioning with Septentrio mosaic-G5, [Long-term stability (24 h)](https://h-shiono.github.io/MRTKLIB/hardware/cssr2rtcm3-mosaic-g5/#long-term-stability-24-h)
+
+今回、精度劣化の一因を突き止めることができ、修正を行いました。
+
+1. 位相バイアスのラップ補正（±100周期）の取りこぼし修正 (#97, #207)
+2. Galileo E5a の OSR 変換時のグリッチ（跳び）の解消 (#98, #208)
+3. 有効な OSR 観測量が出力されていない衛星のマスキング
+
+現在、連続稼働試験を行なっており、完了次第ご報告いたします。
+なお、短時間の結果では上記の修正によって測位が不安定になって一時的に Float に落ちても短時間で Fix に復帰することを確認しています。
+
+---
+
+最近時間が取れず紹介記事を書けていないのですが、他にもバグフィックス等改善を実施しています。
+
+| Version | 主な変更内容 |
+| :---: | --- |
+| **v0.6.10** | 単独測位の精度向上 ([#116](https://github.com/h-shiono/MRTKLIB/issues/116))、[ベンチマーク](https://h-shiono.github.io/MRTKLIB/reference/benchmark/#v0610-single-point-positioning-spp-benchmark-results)にて **\<2 m の割合 +20 pp, Median -50 %, 95% -30 %, RMS -56 %** の大幅な改善の達成 |
+| **v0.6.11** | CI の改善 ([#166](https://github.com/h-shiono/MRTKLIB/issues/166)、[#175](https://github.com/h-shiono/MRTKLIB/issues/175))、Google Smartphone Decimeter Challenge ベンチマークの追加 ([#165](https://github.com/h-shiono/MRTKLIB/issues/165)) |
+| **v0.6.12** | Realtime MADOCA-PPP の信号選択バグ解消 ([#183](https://github.com/h-shiono/MRTKLIB/issues/183)、および関連チケット) |
+| **v0.6.13** | CLAS PPP-RTK で用いる単独測位解のロバスト性向上 (`v0.6.10` の PPP-RTK への適用) |
+| **v0.6.14** | CLAS PPP-RTK のリアルタイム処理周りの改善（上述）、単一 COM ポートでの双方向運用（`mrtk relay -b`）の手順を整備 ([#117](https://github.com/h-shiono/MRTKLIB/issues/117)) |
+
+`v0.6.10` の単独測位の精度向上 ([#116](https://github.com/h-shiono/MRTKLIB/issues/116))、`v0.6.14` の単一 COM ポートでの双方向運用（`mrtk relay -b`）の手順を整備 ([#117](https://github.com/h-shiono/MRTKLIB/issues/117)) については[全国大会](./2026-05-ipntj-reflection.mdx)にていただいたフィードバックを基に実現した改善です。
+また、`v0.6.12` の Realtime MADOCA-PPP の信号選択バグ解消 ([#183](https://github.com/h-shiono/MRTKLIB/issues/183)) についてもバグレポートをいただいた結果、修正することができました。
+
+このように、皆様からのバグレポートは MRTKLIB の開発・品質向上において大変貴重です。
+些細なことでも良いので、不具合を見つけたらご一報いただけますと幸いです。
