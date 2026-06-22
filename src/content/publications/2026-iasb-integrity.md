@@ -21,6 +21,3 @@ date: 2026-06-22
 ---
 
 <!-- Body content. Fill in or replace. -->
-
-
-https://link.springer.com/article/10.1007/s10291-026-02109-6
