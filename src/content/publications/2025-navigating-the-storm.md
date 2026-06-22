@@ -1,7 +1,6 @@
 ---
 title: "Navigating the Storm: A Diagnostic Analysis of QZSS CLAS Performance and Vulnerabilities Through the Solar Cycle 25 Maximum"
-authors: ["H.
-Shiono"]
+authors: ["H.Shiono", "N.Kubo"]
 venue: "Navigation"
 year: 2026
 type: journal
