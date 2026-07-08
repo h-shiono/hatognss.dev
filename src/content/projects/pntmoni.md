@@ -1,7 +1,7 @@
 ---
 title: "pntmoni"
 category: work
-status: planning
+status: alpha
 summary: "PNT Moni provides transparent, methodologically rigorous, and research-grade evaluation of GNSS"
 website: "https://pntmoni.com"
 tech: ["CLASLIB", "teqc"]
