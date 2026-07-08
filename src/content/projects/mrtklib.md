@@ -6,7 +6,7 @@ summary: "Modern GNSS positioning library — PPP, PPP-AR, PPP-RTK (CLAS/MADOCA)
 tech: ["C"]
 tags: ["GNSS", "RTK", "PPP", "PPP-RTK", "CLAS", "MADOCA"]
 repo: "https://github.com/h-shiono/MRTKLIB"
-demo: "https://h-shiono.github.io/MRTKLIB/"
+website: "https://h-shiono.github.io/MRTKLIB/"
 featured: true
 startDate: 2026-02-23
 ---

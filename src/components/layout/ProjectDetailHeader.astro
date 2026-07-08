@@ -14,6 +14,7 @@ const {
   status,
   tech,
   repo,
+  website,
   demo,
   docs,
   startDate,
@@ -49,9 +50,10 @@ const {
     )}
   </dl>
 
-  {(repo || demo || docs) && (
+  {(repo || website || demo || docs) && (
     <ul class="link-bar" aria-label="External links">
       {repo && <li><a href={repo} rel="noopener" target="_blank">Repo →</a></li>}
+      {website && <li><a href={website} rel="noopener" target="_blank">Website →</a></li>}
       {demo && <li><a href={demo} rel="noopener" target="_blank">Demo →</a></li>}
       {docs && <li><a href={docs} rel="noopener" target="_blank">Docs →</a></li>}
     </ul>

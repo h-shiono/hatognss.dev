@@ -6,7 +6,8 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, summary, status, tech, repo, demo, docs, category } = entry.data;
+const { title, summary, status, tech, repo, website, demo, docs, category } =
+  entry.data;
 
 const sectionRoot =
   category === 'oss' ? 'oss' : category === 'work' ? 'works' : 'blog';
@@ -25,6 +26,7 @@ const detailHref = `/${sectionRoot}/${entry.slug}/`;
   )}
   <ul class="project-card-links" aria-label="Links">
     {repo && <li><a href={repo} rel="noopener" target="_blank">Repo</a></li>}
+    {website && <li><a href={website} rel="noopener" target="_blank">Website</a></li>}
     {demo && <li><a href={demo} rel="noopener" target="_blank">Demo</a></li>}
     {docs && <li><a href={docs} rel="noopener" target="_blank">Docs</a></li>}
   </ul>
