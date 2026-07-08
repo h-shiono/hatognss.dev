@@ -1,5 +1,5 @@
 ---
-title: "CLAS Summary Dashboard"
+title: "CLAS Live Dashboard"
 category: work
 status: alpha
 summary: "Real-time QZSS CLAS PPP-RTK positioning montor"
