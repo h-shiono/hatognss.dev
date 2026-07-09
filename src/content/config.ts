@@ -89,6 +89,7 @@ const projects = defineCollection({
     website: z.string().url().optional(),
     demo: z.string().url().optional(),
     docs: z.string().url().optional(),
+    doi: z.string().optional(),
     tech: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
     highlights: z.array(z.string()).optional(),

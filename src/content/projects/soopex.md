@@ -6,6 +6,7 @@ summary: "Open exchange format and Python toolkit for LEO satellite Doppler obse
 tech: ["Python"]
 tags: ["SoOp", "MRTKLIB"]
 repo: "https://github.com/h-shiono/soopex"
+doi: "10.5281/zenodo.19647800"
 featured: true
 startDate: 2026-04-19
 ---

@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, summary, status, tech, repo, website, demo, docs, category } =
+const { title, summary, status, tech, repo, website, demo, docs, doi, category } =
   entry.data;
 
 const sectionRoot =
@@ -29,6 +29,7 @@ const detailHref = `/${sectionRoot}/${entry.slug}/`;
     {website && <li><a href={website} rel="noopener" target="_blank">Website</a></li>}
     {demo && <li><a href={demo} rel="noopener" target="_blank">Demo</a></li>}
     {docs && <li><a href={docs} rel="noopener" target="_blank">Docs</a></li>}
+    {doi && <li><a href={`https://doi.org/${doi}`} rel="noopener" target="_blank">DOI</a></li>}
   </ul>
 </article>
 

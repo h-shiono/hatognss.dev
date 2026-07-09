@@ -177,6 +177,7 @@ Unified collection for OSS, Works, and Hobby projects, discriminated by `categor
   website?: string,               // canonical public site (product site, GitHub Pages landing/docs home, live service)
   demo?: string,                  // live interactive demo (only when distinct from website)
   docs?: string,
+  doi?: string,                   // Zenodo/archival DOI, bare form "10.5281/zenodo.1234567" — renders as a DOI link for citable software
   tech: string[],                 // ["C", "Python", "React", ...]
   tags: string[],
   highlights?: string[],          // bullet points for cards
@@ -191,7 +192,9 @@ Unified collection for OSS, Works, and Hobby projects, discriminated by `categor
 - `work` → listed on `/works/`
 - `hobby` → listed on `/about/` under "Side projects · 寄り道"
 
-**Link fields (`website` vs `demo`):** Use `website` for the project's canonical public site — a product/service site (e.g., `pntmoni.com`), or a GitHub Pages landing/docs home (e.g., MRTKLIB). Reserve `demo` for a genuinely interactive, "try-it" demo that is distinct from the website. A project may have both. Links render in order Repo → Website → Demo → Docs on both cards and detail pages.
+**Link fields (`website` vs `demo`):** Use `website` for the project's canonical public site — a product/service site (e.g., `pntmoni.com`), or a GitHub Pages landing/docs home (e.g., MRTKLIB). Reserve `demo` for a genuinely interactive, "try-it" demo that is distinct from the website. A project may have both. Links render in order Repo → Website → Demo → Docs → DOI on both cards and detail pages.
+
+**`doi` field:** For software archived with a citable DOI (e.g. Zenodo), store the **bare** DOI (`10.5281/zenodo.1234567`), not a full URL. It renders as a `DOI` link resolving through `https://doi.org/`, matching the `publications` collection convention.
 
 ### `blog` collection
 
@@ -352,5 +355,5 @@ This `CLAUDE.md` is itself a tracked artifact. Update version and date at the bo
 
 ---
 
-**Version**: 0.7 (added `website` field to projects schema; documented `website` vs `demo` and link order)
+**Version**: 0.8 (added `doi` field to projects schema for citable software; documented DOI link rendering and order)
 **Last updated**: 2026-07-08
