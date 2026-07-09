@@ -5,6 +5,7 @@ venue: "GPS Solutions"
 year: 2026
 type: journal
 status: published
+doi: "10.1007/s10291-026-02109-6"
 abstract: |
     Bottom-up PPP-RTK services, such as QZSS CLAS, generate corrections using local reference station networks.
     Prior work identified ``Error Cross-Contamination,'' where global errors leak into local atmospheric estimates.

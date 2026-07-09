@@ -5,6 +5,7 @@ venue: "Navigation"
 year: 2026
 type: journal
 status: published
+doi: "10.33012/navi.762"
 abstract: |
     This paper presents the first multi-year, nationwide diagnostic analysis of the Quasi-Zenith Satellite System Centimeter Level Augmentation Service (CLAS) precise point positioning (PPP) real-time kinematic (RTK) service, spanning the rise, peak (late 2024 to mid-2025), and initial decline of Solar Cycle 25.
     Using data from approximately 1,300 GNSS Earth Observation Network System (GEONET) stations, we validated our 30-s sampling methodology against official 1-Hz reports and analyzed nationwide performance trends.
