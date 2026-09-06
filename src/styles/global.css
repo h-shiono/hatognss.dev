@@ -13,10 +13,12 @@
  * chip tokens so that clickable things read as clickable. The theme itself
  * (#14130F x #EF9F27) is unchanged.
  *
- * Atlas was implemented earlier against legacy names (--color-background,
- * --color-foreground, --color-background-secondary, --color-border-tertiary,
- * --color-foreground-muted). Those are kept as aliases so atlas.astro and
- * AtlasList.astro continue to render unchanged.
+ * Atlas, ProjectCard and SlidesCard were implemented earlier against legacy
+ * names (--color-background, --color-foreground, --color-background-secondary,
+ * --color-border-tertiary, --color-foreground-muted). Those aliases are kept
+ * so the code still referencing them resolves. AtlasList moved to the
+ * canonical names in the readability pass; the rest are candidates for the
+ * same cleanup.
  *
  * Light is the @theme default. [data-theme="dark"] is overridden by the
  * prefers-color-scheme media query below.
@@ -296,6 +298,11 @@ a:hover {
 .table-wrap {
   overflow-x: auto;
   margin: 0 0 1.5rem 0;
+}
+/* The wrapper is focusable so a keyboard user can scroll a wide table. */
+.table-wrap:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }
 .prose table {
   border-collapse: collapse;

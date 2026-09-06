@@ -1,10 +1,13 @@
 ---
 /*
- * Wraps a Markdown table so it scrolls inside its own box on narrow screens
- * instead of widening the article. Passed to <Content components={{ table }} />
- * from the article routes.
+ * Wraps a Markdown table so it scrolls horizontally on narrow screens instead
+ * of widening the article. Passed to <Content components={{ table }} /> from
+ * the article routes.
+ *
+ * tabindex="0" makes the scroll container reachable by keyboard, so a wide
+ * table can be scrolled without a pointer. global.css gives it a focus ring.
  */
 ---
-<div class="table-wrap">
+<div class="table-wrap" tabindex="0">
   <table><slot /></table>
 </div>
