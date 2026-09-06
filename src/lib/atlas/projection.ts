@@ -24,6 +24,12 @@ export function makePathGenerator(projection: GeoProjection): GeoPath {
   return geoPath(projection);
 }
 
+// Outline of the projected globe. Drawn under the graticule so the map reads
+// as a bounded object rather than paths floating on the page background.
+export function getSphere(): GeoSphere {
+  return SPHERE;
+}
+
 // 30° spacing per docs/atlas-design.md §6 "Map → Graticule".
 export function getGraticule(): MultiLineString {
   return geoGraticule().step([30, 30])() as MultiLineString;

@@ -25,11 +25,11 @@ const detailHref = `/${sectionRoot}/${entry.slug}/`;
     </ul>
   )}
   <ul class="project-card-links" aria-label="Links">
-    {repo && <li><a href={repo} rel="noopener" target="_blank">Repo</a></li>}
-    {website && <li><a href={website} rel="noopener" target="_blank">Website</a></li>}
-    {demo && <li><a href={demo} rel="noopener" target="_blank">Demo</a></li>}
-    {docs && <li><a href={docs} rel="noopener" target="_blank">Docs</a></li>}
-    {doi && <li><a href={`https://doi.org/${doi}`} rel="noopener" target="_blank">DOI</a></li>}
+    {repo && <li><a href={repo} rel="noopener" target="_blank">Repo <span aria-hidden="true">↗</span></a></li>}
+    {website && <li><a href={website} rel="noopener" target="_blank">Website <span aria-hidden="true">↗</span></a></li>}
+    {demo && <li><a href={demo} rel="noopener" target="_blank">Demo <span aria-hidden="true">↗</span></a></li>}
+    {docs && <li><a href={docs} rel="noopener" target="_blank">Docs <span aria-hidden="true">↗</span></a></li>}
+    {doi && <li><a href={`https://doi.org/${doi}`} rel="noopener" target="_blank">DOI <span aria-hidden="true">↗</span></a></li>}
   </ul>
 </article>
 
@@ -37,15 +37,16 @@ const detailHref = `/${sectionRoot}/${entry.slug}/`;
   .project-card {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 1.25rem;
-    border: 0.5px solid var(--color-border);
-    border-radius: 4px;
-    background: transparent;
-    transition: border-color 0.15s ease-out;
+    gap: 12px;
+    padding: 22px;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    background: var(--color-surface);
+    transition: border-color 0.15s ease-out, background-color 0.15s ease-out;
   }
   .project-card:hover {
-    border-color: var(--color-text-tertiary);
+    border-color: var(--color-accent);
+    background: var(--color-surface-hover);
   }
 
   .project-card-header {
@@ -57,11 +58,11 @@ const detailHref = `/${sectionRoot}/${entry.slug}/`;
 
   .project-card-title {
     font-family: var(--font-display);
-    font-size: 19px;
-    font-weight: 500;
+    font-size: 21px;
+    font-weight: 600;
     line-height: 1.35;
     margin: 0;
-    color: var(--color-text-primary);
+    color: var(--color-text-heading);
   }
   .project-card-title a {
     color: inherit;
@@ -75,13 +76,19 @@ const detailHref = `/${sectionRoot}/${entry.slug}/`;
   .project-card-status {
     font-family: var(--font-mono);
     font-size: 10px;
+    font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    padding: 3px 7px;
+    line-height: 1.4;
     white-space: nowrap;
   }
   .project-card-status[data-status='active'] {
     color: var(--color-accent);
+    border-color: var(--color-accent-border);
   }
   .project-card-status[data-status='archived'] {
     color: var(--color-text-tertiary);
@@ -89,43 +96,60 @@ const detailHref = `/${sectionRoot}/${entry.slug}/`;
 
   .project-card-summary {
     margin: 0;
-    font-size: 14px;
-    line-height: 1.55;
+    font-size: 14.5px;
+    line-height: 1.75;
     color: var(--color-text-secondary);
+    text-wrap: pretty;
   }
 
+  /* Tech: filled, borderless — reads as a label, not a control. */
   .project-card-tech {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 6px 12px;
+    gap: 6px;
   }
   .project-card-tech li {
     font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    color: var(--color-text-secondary);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--color-chip-fg);
+    background: var(--color-background-secondary);
+    border-radius: 3px;
+    padding: 3px 8px;
+    line-height: 1.5;
   }
 
+  /* Links: outlined buttons — reads as a control. margin-top keeps the row
+     pinned to the bottom of the card whatever the summary length. */
   .project-card-links {
     list-style: none;
-    margin: 4px 0 0 0;
+    margin: auto 0 0 0;
     padding: 0;
     display: flex;
-    gap: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
   .project-card-links a {
+    display: inline-block;
     font-family: var(--font-mono);
     font-size: 11px;
-    letter-spacing: 0.06em;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-text-secondary);
+    color: var(--color-accent);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    padding: 5px 11px;
+    line-height: 1.4;
     text-decoration: none;
+    transition: background-color 0.15s ease-out, border-color 0.15s ease-out;
   }
   .project-card-links a:hover {
-    color: var(--color-accent);
+    background: var(--color-chip-hover-bg);
+    border-color: var(--color-accent-border);
     text-decoration: none;
   }
 </style>

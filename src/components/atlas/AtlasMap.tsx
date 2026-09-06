@@ -17,6 +17,7 @@ export interface AtlasMarker {
 export interface AtlasMapProps {
   landPath: string;
   graticulePath: string;
+  spherePath: string;
   width: number;
   height: number;
   markers: AtlasMarker[];
@@ -25,6 +26,7 @@ export interface AtlasMapProps {
 export default function AtlasMap({
   landPath,
   graticulePath,
+  spherePath,
   width,
   height,
   markers,
@@ -75,19 +77,20 @@ export default function AtlasMap({
         role="img"
         aria-label="World map of talk venues"
       >
+        <path d={spherePath} fill="none" stroke="var(--color-border)" strokeWidth={1} />
         <path
           d={graticulePath}
           fill="none"
-          stroke="var(--color-border-tertiary)"
-          strokeWidth={0.5}
+          stroke="var(--color-map-graticule)"
+          strokeWidth={0.6}
           strokeDasharray="1 3"
-          opacity={0.4}
+          opacity={0.8}
         />
         <path
           d={landPath}
           fill="var(--color-background-secondary)"
-          stroke="var(--color-border-tertiary)"
-          strokeWidth={0.5}
+          stroke="var(--color-map-land-stroke)"
+          strokeWidth={0.6}
         />
         {markers.map((m) => {
           const isHovered = hoveredSlug === m.slug;
@@ -100,9 +103,9 @@ export default function AtlasMap({
               <circle
                 cx={m.x}
                 cy={m.y}
-                r={isHovered ? 8 : 5}
+                r={isHovered ? 9 : 6}
                 fill="var(--color-accent)"
-                stroke="var(--color-background)"
+                stroke="var(--color-map-bg)"
                 strokeWidth={1.5}
                 onMouseEnter={() => {
                   setHoveredSlug(m.slug);

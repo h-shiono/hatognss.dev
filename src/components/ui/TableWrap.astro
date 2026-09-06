@@ -1,0 +1,10 @@
+---
+/*
+ * Wraps a Markdown table so it scrolls inside its own box on narrow screens
+ * instead of widening the article. Passed to <Content components={{ table }} />
+ * from the article routes.
+ */
+---
+<div class="table-wrap">
+  <table><slot /></table>
+</div>

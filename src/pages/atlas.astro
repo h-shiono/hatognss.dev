@@ -12,6 +12,7 @@ import {
   ATLAS_HEIGHT,
   ATLAS_WIDTH,
   getGraticule,
+  getSphere,
   makePathGenerator,
   makeProjection,
 } from '../lib/atlas/projection';
@@ -21,6 +22,7 @@ const pathGen = makePathGenerator(projection);
 
 const landPath = pathGen(getLandFeatures()) ?? '';
 const graticulePath = pathGen(getGraticule()) ?? '';
+const spherePath = pathGen(getSphere()) ?? '';
 
 const allTalks = await getCollection('talks');
 
@@ -89,6 +91,7 @@ const yearLabel =
           client:visible
           landPath={landPath}
           graticulePath={graticulePath}
+          spherePath={spherePath}
           width={ATLAS_WIDTH}
           height={ATLAS_HEIGHT}
           markers={markers}
@@ -107,7 +110,12 @@ const yearLabel =
   .atlas-section {
     margin-top: 3rem;
   }
+  /* The map is a surface, not loose paths: markers need a ground to sit on. */
   .atlas-map-wrapper {
-    margin: 0;
+    position: relative;
+    background: var(--color-map-bg);
+    border: 1px solid var(--color-rule);
+    border-radius: 6px;
+    padding: 8px;
   }
 </style>
