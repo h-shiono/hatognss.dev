@@ -56,16 +56,16 @@ The masthead and footer are **shared across all pages**. The middle is determine
 | Position | Static (not sticky in v0.1) |
 | Height | Auto, content-driven |
 | Padding-bottom | 14px |
-| Border-bottom | 0.5px solid `var(--color-border)` |
-| Margin-bottom | 3.5rem (56px) |
-| Layout | Flex, brand left, nav right, baseline-aligned |
+| Border-bottom | 1px solid `var(--color-border)` |
+| Margin-bottom | 3.25rem (52px) |
+| Layout | Flex, brand left, nav right, baseline-aligned, wraps |
 
 ### Brand (left)
 
 - Text: `hato.GNSS`
 - Font: Fraunces (serif display)
-- Size: 20px desktop, 18px mobile
-- Weight: 500
+- Size: 21px desktop, 19px mobile
+- Weight: 600
 - Letter-spacing: 0.01em
 - Links to: `/`
 
@@ -73,23 +73,27 @@ The masthead and footer are **shared across all pages**. The middle is determine
 
 - Items (in order): `Research`, `OSS`, `Works`, `Atlas`, `Blog`
 - Font: JetBrains Mono
-- Size: 11px
-- Weight: 400
+- Size: 12px
+- Weight: 500
 - Letter-spacing: 0.10em
 - Case: UPPERCASE
-- Gap: 22px desktop, 14px mobile
-- Color: `var(--color-text-secondary)` default, `var(--color-text-primary)` on hover
-- Transition: color 0.15s
+- Gap: 24px desktop, 16px mobile
+- Color: `var(--color-text-secondary)` default, `var(--color-text-heading)` on hover
+- Current page (`aria-current="page"`): `var(--color-accent)` + 1.5px accent underline
+- Transition: color 0.15s, border-color 0.15s
 
 ### Mobile behavior
 
 At viewport width < 640px:
 - Brand stays on left
 - Nav items stay visible (do NOT collapse to hamburger in v0.1)
-- Nav gap reduces to 14px
-- If any nav item would overflow, allow horizontal scroll on the nav element
+- Nav gap reduces to 16px
+- The masthead wraps: the nav drops to its own line under the brand rather than
+  widening the page
+- If the nav is still too wide on that line, it scrolls horizontally
 
-Hamburger menu is deferred to v0.2 — at 11px mono with 5 items, all fit even on 320px viewports.
+Hamburger menu is deferred to v0.2 — at 12px mono with 5 items, the nav fits on
+its own line down to 320px.
 
 ## 4. Container and Vertical Rhythm
 
@@ -123,45 +127,65 @@ The Atlas page (already implemented at 680px content) will scale up to fill 920p
 
 | Role | Font | Source | License |
 |---|---|---|---|
-| Display + body | **Fraunces** (variable) | Google Fonts via @fontsource | OFL (free) |
+| Display (headings, brand) | **Fraunces** (variable) | Google Fonts via @fontsource | OFL (free) |
+| Body | **Noto Sans JP** | Google Fonts via @fontsource | OFL (free) |
 | Monospace | **JetBrains Mono** | Google Fonts via @fontsource | OFL (free) |
 
-Both are **self-hosted via `@fontsource` packages** — no external CDN call. This is a privacy and performance decision: no third-party font requests are made from the user's browser.
+All three are **self-hosted via `@fontsource` packages** — no external CDN call. This is a privacy and performance decision: no third-party font requests are made from the user's browser.
+
+Body was Fraunces until the readability pass (2026-09). Japanese has no Fraunces
+coverage, so JA body text fell back to a system mincho at a serif face's line
+height and was the single worst legibility problem on the site. Body is now a
+gothic; `--font-display` carries Noto Sans JP as its second fallback, so a mixed
+heading renders Latin in Fraunces and Japanese in gothic.
 
 System fallbacks:
-- Fraunces fallback: `"Iowan Old Style", Georgia, serif`
+- Fraunces fallback: `"Noto Sans JP", "Iowan Old Style", Georgia, serif`
+- Noto Sans JP fallback: `system-ui, sans-serif`
 - JetBrains Mono fallback: `ui-monospace, "SF Mono", Menlo, monospace`
+
+`--font-display-serif` (`Fraunces` with **no** JP fallback) exists for the one
+heading kept deliberately in mincho: the Home hero tagline.
 
 ### Type scale
 
+Sizes below are post-readability-pass (2026-09).
+
 | Element | Size | Weight | Line-height |
 |---|---|---|---|
-| Hero tagline | 34px | 400 | 1.3 |
-| Hero tagline (mobile) | 26px | 400 | 1.3 |
-| Hero tagline EN | 18px | 400 italic | 1.5 |
-| Page title (H1) | 28px | 500 | 1.3 |
-| Section title (H2) | 22px | 500 | 1.3 |
-| Subsection (H3) | 18px | 500 | 1.4 |
-| Body | 16px | 400 | 1.6 |
-| Card title | 19px | 500 | 1.35 |
-| Latest item | 15px | 400 | 1.5 |
-| Section label | 10px | 400 | 1.0 |
-| Footer | 11px | 400 | 1.0 |
-| Code/mono inline | 14px | 400 | 1.5 |
+| Hero tagline | `clamp(28px, 5vw, 40px)` | 500 | 1.32 |
+| Hero tagline EN | 18px | 400 italic | 1.55 |
+| Page title (H1) | `clamp(26px, 4vw, 32px)` | 600 | 1.3 |
+| Article H1 | `clamp(24px, 3.4vw, 30px)` | 600 | 1.5 |
+| Section title (H2) | 22px | 600 | 1.6 |
+| Subsection (H3) | 19px | 600 | 1.6 |
+| Article body | 16.5px | 400 | 1.9 |
+| Card title | 21px | 600 | 1.35 |
+| Card / summary text | 14.5px | 400 | 1.75 |
+| List entry title | 16.5px | 500 | 1.55 (JA 1.6) |
+| List entry meta | 13.5px | 400 | 1.7 |
+| Year heading | 15px | 500 | 1.4 |
+| Section label | 11px | 500 | 1.0 |
+| Nav item | 12px | 500 | — |
+| Footer | 11.5px | 400 | 1.6 |
 
 ### Section labels
 
 Used as small uppercase markers above content groups (e.g., `LATEST · 最近の記録`):
 
 - Font: JetBrains Mono
-- Size: 10px
-- Weight: 400
+- Size: 11px
+- Weight: 500
 - Letter-spacing: 0.20em
 - Text-transform: uppercase
 - Color: `var(--color-text-secondary)`
-- Margin-bottom: 14px
-- Padding-bottom: 8px
-- Border-bottom: 0.5px solid `var(--color-border)`
+- Separator (`·`): `var(--color-accent)`
+- Margin-bottom: 1.125rem
+- Padding-bottom: 10px
+- Border-bottom: 1px solid `var(--color-border)`
+
+Rules are 1px site-wide. The 0.5px hairlines of the first build vanished on
+non-retina displays and read as noise on retina.
 
 **JP · EN bilingual pattern is mandatory** for section labels (continuity with hato-colle).
 
@@ -173,10 +197,41 @@ Used as small uppercase markers above content groups (e.g., `LATEST · 最近の
 |---|---|---|
 | `--color-bg` | `#FAF7F0` | `#14130F` |
 | `--color-text-primary` | `#1A1A1A` | `#E8E4DA` |
-| `--color-text-secondary` | `#6B6B6B` | `#9B9890` |
-| `--color-text-tertiary` | `#9A9A9A` | `#6B6863` |
-| `--color-border` | `#E0DCD0` | `#2A2925` |
+| `--color-text-secondary` | `#55524B` | `#BDB8AB` |
+| `--color-text-tertiary` | `#827E75` | `#7E7A72` |
+| `--color-border` | `#CFC9BA` | `#3A382F` |
 | `--color-accent` | `#854F0B` | `#EF9F27` |
+
+The secondary, tertiary and border values were raised in the readability pass
+(design handoff "1c", 2026-09). The originals (`#6B6B6B` / `#9B9890`,
+`#9A9A9A` / `#6B6863`, `#E0DCD0` / `#2A2925`) fell below 5:1 at the 13-14px
+sizes they are used at, and the border disappeared into the dark background.
+
+### Readability pass additions
+
+Introduced with the same handoff. Surfaces and rules exist so that a card or a
+list row can show it is clickable without borrowing the accent.
+
+| Token | Light mode | Dark mode | Used for |
+|---|---|---|---|
+| `--color-text-heading` | `#111111` | `#F3F0E8` | Headings, card and entry titles, brand |
+| `--color-surface` | `#F5F1E7` | `#1C1A15` | Card face |
+| `--color-surface-hover` | `#EFE9DD` | `#221F19` | Card face on hover |
+| `--color-row-hover` | `#F2ECE1` | `#1A1813` | List row on hover |
+| `--color-rule` | `#E2DDD0` | `#2A2925` | Thin rule between list rows |
+| `--color-accent-border` | `#C9A05C` | `#6B4E1E` | Chip border (dimmed accent) |
+| `--color-prose-fg` | `#26241F` | `#DCD7CC` | Long-form body text |
+| `--color-code-fg` | `#6B3F08` | `#EBD9B8` | Inline code |
+| `--color-code-bg` | `#F2ECE0` | `#100F0C` | Code block ground |
+| `--color-chip-fg` | `#5F5B52` | `#A8A399` | Tech tag label |
+| `--color-chip-hover-bg` | `#F0E6D3` | `#2C271C` | Link button fill on hover |
+| `--color-map-bg` | `#F6F2E8` | `#17160F` | Atlas map surface and marker stroke |
+| `--color-map-land-stroke` | `#BDB5A3` | `#4A473E` | Atlas land outline |
+| `--color-map-graticule` | `#D5CEBD` | `#434036` | Atlas graticule |
+
+Light values for `--color-text-heading`, `--color-map-land-stroke` and
+`--color-map-graticule` were chosen during implementation; the handoff did not
+specify them.
 
 ### Accent usage rules
 
@@ -269,11 +324,11 @@ NOT under /oss/ or /works/. Each entry links externally to its own site/repo.
 
 | Property | Value |
 |---|---|
-| Margin-top | 5rem (80px) |
+| Margin-top | 4.75rem (76px) |
 | Padding-top | 18px |
-| Border-top | 0.5px solid `var(--color-border)` |
+| Border-top | 1px solid `var(--color-border)` |
 | Layout | Flex, identity left, links right, baseline-aligned |
-| Font | JetBrains Mono, 11px, `var(--color-text-secondary)` |
+| Font | JetBrains Mono, 11.5px, `var(--color-text-secondary)` |
 
 ### Left side
 

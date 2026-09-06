@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ArticleLayout from '../layouts/ArticleLayout.astro';
+import SectionLabel from '../components/layout/SectionLabel.astro';
 
 const hobbies = (await getCollection('projects', (e) => e.data.category === 'hobby'))
   .sort(
@@ -74,11 +75,7 @@ for (const r of recognition) recognitionByYear[r.year].push(r);
 
   {recognitionYears.length > 0 && (
     <section class="recognition" aria-labelledby="recognition-heading">
-      <h2 id="recognition-heading" class="section-label">
-        <span lang="en">Awards</span>
-        <span class="sep" aria-hidden="true">·</span>
-        <span lang="ja">受賞</span>
-      </h2>
+      <SectionLabel as="h2" id="recognition-heading" en="Awards" ja="受賞" />
       <ul class="year-list">
         {recognitionYears.map((y) => (
           <li class="year-row">
@@ -87,14 +84,12 @@ for (const r of recognition) recognitionByYear[r.year].push(r);
               {recognitionByYear[y].map((r) => (
                 <li class="award-row">
                   <span class="award-name">{r.name}{r.venue && <>, {r.venue}</>}</span>
-                  <span class="award-work">
-                    — <a href={r.workHref}>{r.workTitle}</a>
+                  <span class="award-meta">
+                    <a class="award-work" href={r.workHref}>{r.workTitle}</a>
+                    {r.url && (
+                      <a class="award-ext" href={r.url} rel="noopener" target="_blank">Announcement →</a>
+                    )}
                   </span>
-                  {r.url && (
-                    <span class="award-ext">
-                      <a href={r.url} rel="noopener" target="_blank">Announcement →</a>
-                    </span>
-                  )}
                 </li>
               ))}
             </ul>
@@ -106,11 +101,7 @@ for (const r of recognition) recognitionByYear[r.year].push(r);
 
   {hobbies.length > 0 && (
     <section class="side-projects" aria-labelledby="side-projects-heading">
-      <h2 id="side-projects-heading" class="section-label">
-        <span lang="en">Side projects</span>
-        <span class="sep" aria-hidden="true">·</span>
-        <span lang="ja">寄り道</span>
-      </h2>
+      <SectionLabel as="h2" id="side-projects-heading" en="Side projects" ja="寄り道" />
       <ul class="project-list">
         {hobbies.map((p) => (
           <li class="project">
@@ -134,22 +125,6 @@ for (const r of recognition) recognitionByYear[r.year].push(r);
   .side-projects {
     margin-top: 3rem;
   }
-  .section-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 400;
-    line-height: 1.0;
-    letter-spacing: 0.20em;
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
-    margin: 0 0 1.25rem 0;
-    padding-bottom: 8px;
-    border-bottom: 0.5px solid var(--color-border);
-  }
-  .section-label .sep {
-    color: var(--color-text-tertiary);
-    margin: 0 4px;
-  }
   .project-list {
     list-style: none;
     margin: 0;
@@ -164,15 +139,14 @@ for (const r of recognition) recognitionByYear[r.year].push(r);
   .project-title {
     font-family: var(--font-display);
     font-size: 17px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.4;
-    color: var(--color-text-primary);
+    color: var(--color-text-heading);
     margin: 0 0 0.25rem 0;
   }
   .project-summary {
-    font-family: var(--font-display);
-    font-size: 15px;
-    line-height: 1.5;
+    font-size: 14.5px;
+    line-height: 1.75;
     color: var(--color-text-secondary);
     margin: 0 0 0.5rem 0;
   }
@@ -189,8 +163,9 @@ for (const r of recognition) recognitionByYear[r.year].push(r);
   }
   .project-links a {
     font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     color: var(--color-text-secondary);
     text-decoration: none;
   }
@@ -207,19 +182,21 @@ for (const r of recognition) recognitionByYear[r.year].push(r);
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
+  /* Same three-part rhythm as a /research/ entry: date column, title, meta. */
   .year-row {
     display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: 16px;
-    align-items: baseline;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
   }
   .year-row .year-num {
     font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    color: var(--color-text-tertiary);
+    font-size: 12.5px;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
   }
   .award-list {
     list-style: none;
@@ -227,40 +204,53 @@ for (const r of recognition) recognitionByYear[r.year].push(r);
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 1rem;
   }
   .award-row {
-    font-family: var(--font-display);
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--color-text-primary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
   }
   .award-name {
-    color: var(--color-accent);
+    font-size: 16.5px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--color-text-heading);
+    text-wrap: pretty;
+  }
+  .award-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
   }
   .award-work {
     color: var(--color-text-secondary);
-  }
-  .award-work a {
-    color: var(--color-text-primary);
     text-decoration: none;
-    border-bottom: 0.5px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
     transition: color 0.15s ease-out, border-color 0.15s ease-out;
   }
-  .award-work a:hover {
+  .award-work:hover {
     color: var(--color-accent);
     border-bottom-color: var(--color-accent);
-  }
-  .award-ext {
-    margin-left: 8px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-  }
-  .award-ext a {
-    color: var(--color-text-tertiary);
     text-decoration: none;
   }
-  .award-ext a:hover {
+  .award-ext {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease-out;
+  }
+  .award-ext:hover {
     color: var(--color-accent);
+    text-decoration: none;
   }
 </style>

@@ -45,10 +45,11 @@ export default function TalkTooltip({
         transform,
         width: 220,
         pointerEvents: 'none',
-        background: 'var(--color-background)',
-        border: '0.5px solid var(--color-border-tertiary)',
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-border)',
         borderRadius: 6,
         overflow: 'hidden',
+        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)',
         zIndex: 10,
       }}
     >
@@ -86,14 +87,14 @@ export default function TalkTooltip({
           </span>
         )}
       </div>
-      <div style={{ padding: '10px 12px' }}>
+      <div style={{ padding: '11px 13px 13px' }}>
         <p
           style={{
-            fontSize: 14,
+            fontSize: 14.5,
             fontWeight: 500,
-            color: 'var(--color-foreground)',
+            color: 'var(--color-text-heading)',
             margin: 0,
-            lineHeight: 1.3,
+            lineHeight: 1.45,
           }}
         >
           {marker.title}
@@ -101,9 +102,10 @@ export default function TalkTooltip({
         <p
           style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 11,
+            fontSize: 11.5,
+            lineHeight: 1.5,
             color: 'var(--color-foreground-muted)',
-            margin: '4px 0 0 0',
+            margin: '6px 0 0 0',
           }}
         >
           {dateLabel} · {marker.event}

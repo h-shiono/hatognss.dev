@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import TableWrap from '../../components/ui/TableWrap.astro';
 import { formatDate } from '../../lib/utils';
 
 export async function getStaticPaths() {
@@ -15,6 +16,7 @@ const { title, description, date, updatedDate, language } = entry.data;
 const isJapanese = language === 'ja';
 ---
 <ArticleLayout title={title} description={description}>
+  <a class="back-link" href="/blog/">← Blog</a>
   <header class="post-header" lang={language}>
     <h1>{title}</h1>
     <p class="meta">
@@ -34,34 +36,58 @@ const isJapanese = language === 'ja';
     </p>
   </header>
   <div class="post-body" lang={language}>
-    <Content />
+    <Content components={{ table: TableWrap }} />
   </div>
 </ArticleLayout>
 
 <style>
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.75rem;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease-out;
+  }
+  .back-link:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
   .post-header {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--color-border);
   }
   .post-header h1 {
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.875rem 0;
   }
   .meta {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 12.5px;
+    line-height: 1.6;
     color: var(--color-text-secondary);
     margin: 0;
     letter-spacing: 0.02em;
   }
   .dot {
     color: var(--color-text-tertiary);
-    margin: 0 6px;
+    margin: 0 8px;
   }
   .lang-tag {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     color: var(--color-accent);
-    letter-spacing: 0.10em;
-  }
-  .post-body {
-    font-size: 15px;
-    line-height: 1.75;
+    border: 1px solid var(--color-accent-border);
+    border-radius: 3px;
+    padding: 2px 7px;
+    line-height: 1.4;
   }
 </style>
