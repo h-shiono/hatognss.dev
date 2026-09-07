@@ -10,7 +10,7 @@ featured: false
 startDate: 2026-03-30
 ---
 
-mrtklib-docker-ui wraps MRTKLIB with a Web UI and deploys via Docker. 
+mrtklib-docker-ui wraps [MRTKLIB](../mrtklib) with a Web UI and deploys via Docker. 
 Users can set parameters in a browser, switch between post-processing and real-time positioning, and visualize output from QZSS CLAS or MADOCA-PPP.
 
 ## Usage · 使い方
@@ -20,7 +20,7 @@ See the [companion web page](https://h-shiono.github.io/mrtklib-quickstart/) for
 
 ## In use · 使用実績
 
-- **2026-09-03: IPNTJ International GNSS Summer School 2026**  
+- **2026-09-03: IPNTJ International GNSS Summer School 2026 (Day 4, Receiver Practice)**
   Septentrio demonstrated real-time MADOCA-PPP positioning using MRTKLIB, showing centimeter-level accuracy with QZSS augmentation.
 
 ## Related articles · 関連記事
