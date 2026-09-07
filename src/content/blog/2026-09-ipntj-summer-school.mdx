@@ -1,0 +1,47 @@
+---
+title: "IPNTJ International GNSS Summer School 2026 のお手伝いをしました"
+description: "Receiver Practice クラスの補助と、Windows ユーザ向け MRTKLIB の課題"
+date: 2026-09-07
+tags: ["MRTKLIB", "mrtklib-docker-ui", "IPNTJ", "MADOCA-PPP"]
+draft: false
+featured: false
+language: ja
+---
+
+8月31日〜9月5日にかけて開催された [International GNSS Summer School 2026](https://www.gnss-pnt.org/%E5%9B%BD%E9%9A%9B%E3%82%B5%E3%83%9E%E3%83%BC%E3%82%B9%E3%82%AF%E3%83%BC%E3%83%AB/) の Day 4、"Receiver Practice" クラスのお手伝いをしました。
+Septentrio 社が講師を務め、同社の mosaic-G5 受信機を使い、受信機の基本的な使い方とさまざまな測位方式を体験する、という内容でした。
+今回 MADOCA-PPP の体験に MRTKLIB および mrtklib-docker-ui を活用いただき、私はアシスタントという形で実習のお手伝いをしました。
+
+新しく MRTKLIB を触る方を中心に、mrtklib-docker-ui を実際に使う場面に立ち会わせていただく貴重な機会となりました。
+改めて勉強になったのは、mrtklib-docker-ui を Windows で使おうとする際のセットアップの煩雑さ、そして Windows の権限周りの複雑さです。
+Docker や WSL をインストールする手間、そして「なぜアプリを動かすだけでこんなに複雑なことを？」という心理、察するに余りあるものでした。
+自分で手順書を起こす時点である程度気がついていたつもりではありましたが、Docker や WSL に馴染みのない方にとってはさらに不思議に、難しく感じたものと思います。
+
+もちろん Docker 化したのにはメリットもたくさんありますが、こと Windows で使おうと考えた時には少し考え方を変えるべきだなと強く感じました。
+当面は MRTKLIB 自体および mrtklib-docker-ui の機能改善に注力しますが、今回の経験を受け、将来的には Windows のネイティブアプリの制作も選択肢に入れようと考えています。
+
+アプリ開発における課題の一つはフロントエンドと MRTKLIB の通信にあります。
+現在の mrtklib-docker-ui は rtkrcv のコンソール（telnet）経由で MRTKLIB を制御していますが、これは本来人間が読むための出力で、プログラムから扱うには脆弱です。
+MRTKLIB では JSON-RPC の導入を検討しています ([#326](https://github.com/h-shiono/MRTKLIB/issues/326))。
+これは mrtklib-docker-ui 自体の改善にもつながるため、現在の `v0.7` 系のいずれかのリリースで入れられればと考えています。
+
+---
+
+今回レクチャーする過程で受講者の方の PC を見せていただく機会があったのですが、みなさん RTKLIB, MADOCALIB, CLASLIB, mrtklib-docker-ui (mrtklib-quickstart) それぞれを準備していました。
+おそらく講義毎に異なるライブラリを使っているためだと推察されます。
+これこそまさに MRTKLIB が問題提起している「エコシステムの分断」の最たる例であり、受講者が複数の環境を準備し、それぞれの違いを理解しなければならない負担は大きいと感じました。
+より MRTKLIB が信頼を勝ち取り、共通の教材として使っていただけることを目指したいと思いました。
+
+---
+
+今回作成した mrtklib-docker-ui のクイックスタートガイドは GitHub にてどなたでもご覧いただけます。
+よろしければご活用ください。
+
+- GitHub: [mrtklib-quickstart](https://github.com/h-shiono/mrtklib-quickstart)
+- GitHub Pages: [mrtklib-quickstart](https://h-shiono.github.io/mrtklib-quickstart/)
+
+---
+
+来週は ION GNSS+ 2026 に参加します。
+[Blind, Laser-Validated Environment Estimation for Crowdsourced GNSS Reference Stations](https://www.ion.org/gnss/abstracts.cfm?paperID=16787) という題目で16日に発表します。
+現地参加させる方は、どうぞよろしくお願いいたします。
