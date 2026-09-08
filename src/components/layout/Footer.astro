@@ -12,11 +12,15 @@ const links = [
 ---
 <footer class="footer">
   <span class="identity">{SITE.title} <span class="sep">·</span> {year}</span>
-  <ul class="links" aria-label="Social links">
+  <ul class="links" aria-label="Footer links">
     <li><a href="/about/">About</a></li>
     <li>
       <span class="sep" aria-hidden="true">·</span>
       <a href="/log/">Log</a>
+    </li>
+    <li>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="/fieldnotes/">Field Notes</a>
     </li>
     {links.map(({ href, label }, i) => (
       <li>
