@@ -7,9 +7,13 @@ const notes = (await getCollection('fieldnotes', (e) => !e.data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const yearOf = (d: Date) => d.getUTCFullYear();
+// Frontmatter dates are date-only, so they parse as midnight UTC (L-S05).
+// Format them in UTC too, or a build host west of Greenwich renders a note
+// one day early while yearOf() still groups it under the UTC year.
 const monthDayFmt = new Intl.DateTimeFormat('en-US', {
   month: 'short',
   day: '2-digit',
+  timeZone: 'UTC',
 });
 
 const years = Array.from(new Set(notes.map((n) => yearOf(n.data.date)))).sort(
