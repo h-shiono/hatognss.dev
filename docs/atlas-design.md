@@ -1,7 +1,7 @@
 # Atlas — Design Memo
 
 > Status: **Approved for v0.1 implementation**
-> Last updated: 2026-05-15
+> Last updated: 2026-09-18
 > Audience: implementers (Hayato, Claude Code, future contributors)
 > Companion: [`docs/prompts/atlas-implementation.md`](./prompts/atlas-implementation.md)
 
@@ -72,15 +72,93 @@ Astro Content Collections natively support this layout when the collection entry
 
 ## 5. Photo specifications
 
+### 5.1 Source photo
+
 | Property | Requirement |
 |---|---|
-| Aspect ratio | **5:3 preferred**, 3:2 acceptable. Final crop via CSS `object-fit: cover` |
-| Source resolution | Short edge ≥ 800px (retina + responsive generation) |
-| Format | JPEG (sRGB). Astro generates WebP/AVIF at build time |
-| Source file size | Up to ~5MB; Astro optimization produces <100KB output |
-| Color profile | sRGB only; no Adobe RGB or wide-gamut |
+| Aspect ratio | Any. Anything other than 1.328:1 is cropped to it during normalization (§5.3) |
+| Resolution | Long edge ≥ 1600px **after** any crop |
+| Format | JPEG, sRGB. No Adobe RGB or wide-gamut |
+| File size | Unconstrained — the normalized asset is what enters the repo |
 
-### Photo selection guidance
+### 5.2 Stored asset
+
+What actually lives at `src/content/talks/<slug>/photo.jpg`:
+
+| Property | Value |
+|---|---|
+| Dimensions | **1600 × 1205** (4080:3072 ≈ 1.328 — the Pixel main-camera frame) |
+| Encoding | JPEG, quality **85**, chroma subsampling **4:2:0** |
+| Color | sRGB, ICC profile retained |
+| Metadata | EXIF / XMP / embedded EXIF thumbnail retained |
+| GPS tags | **Stripped** |
+| Typical size | 250–420 KB, varying with subject complexity at the same quality |
+
+Every photo shares one aspect ratio so the tooltip's CSS crop (§5.4) behaves identically across talks.
+
+### 5.3 Normalization recipe
+
+Run before committing a new photo. ImageMagick and exiftool, both from Homebrew.
+
+One rule, whatever the source shape: **crop to 1.328:1, then resize to 1600 wide**,
+both in a single invocation so the file is encoded once rather than twice. Compute the
+crop box from the source dimensions:
+
+| Source | Crop box |
+|---|---|
+| Already 1.328:1 (4080×3072 straight off the phone) | none — drop `-crop` |
+| Taller than 1.328:1 (portrait, 3:2, 16:9 turned) | `crop_h = round(source_w ÷ 1.328125)` |
+| Wider than 1.328:1 (16:9, panorama) | `crop_w = round(source_h × 1.328125)` |
+
+Only the offset is a judgement call; the box size is arithmetic.
+
+```bash
+# Source already at 1.328:1 — resize only.
+magick photo-original.jpg \
+  -resize 1600x -quality 85 -sampling-factor 2x2,1x1,1x1 \
+  photo.jpg
+
+# Anything else — crop first. A 3072×4080 portrait gives crop_h = 2313;
+# +0+620 is the offset chosen for the ION GNSS+ 2026 photo.
+magick photo-original.jpg \
+  -crop 3072x2313+0+620 +repage \
+  -resize 1600x -quality 85 -sampling-factor 2x2,1x1,1x1 \
+  photo.jpg
+
+# Strip GPS. Metadata-only edit, no re-encode.
+exiftool -gps:all= -overwrite_original photo.jpg
+```
+
+Verify:
+
+```bash
+identify -format "%wx%h Q=%Q %[colorspace] %b\n" photo.jpg   # 1600x1205 Q=85 sRGB
+exiftool -GPS:all -s photo.jpg                                # no output
+```
+
+**Do not use `sips`.** It drops the ICC profile and the XMP block, and rounds the short
+edge to 1204 instead of 1205 — the asset ends up visibly off-standard in metadata terms.
+
+**Choosing the crop offset.** The tooltip re-crops the stored asset to
+1.692:1 (§5.4), taking the centre band and discarding roughly 249px from the top and
+bottom of a 2313px crop. Frame for *that* band, not for the stored 1600×1205. Simulate it
+before committing:
+
+```bash
+magick photo.jpg -gravity center -crop 1600x946+0+0 +repage -resize 440x preview.png
+```
+
+### 5.4 Why the stored aspect ratio is the one that matters
+
+`atlas.astro` calls `getImage({ src, width: 220, height: 130 })` with no `fit` option.
+Astro's sharp service honours `width` + `height` together **only when `fit` is set**;
+otherwise it falls through to a width-only resize. The emitted WebP is therefore
+220 × (220 ÷ source aspect) — 220×166 for every current photo — and the final 220×130
+framing is done by `object-fit: cover` in `TalkTooltip.tsx`. The browser crops, not sharp.
+That is why §5.2 pins one aspect ratio: it is the only way to make the CSS crop
+predictable across talks.
+
+### 5.5 Photo selection guidance
 
 Atlas photos communicate **place**, not **person**.
 
@@ -204,6 +282,10 @@ const thumb = talk.data.thumbnail;
 
 Specify explicit dimensions so Astro can generate the right responsive variants and avoid CLS.
 
+Note: the shipped tooltip uses `getImage()` rather than `<Image>`, and passes `width`/`height`
+without `fit`, so the height is not honoured at the sharp layer. See §5.4 for what that means
+for photo framing.
+
 ## 9. v0.1 scope
 
 **In:**
@@ -253,9 +335,10 @@ These are flagged for consideration once v0.1 ships and patterns emerge from rea
 | 2026-05-15 | Antique brass accent (#854F0B / #EF9F27) | Almanac aesthetic; warm but restrained |
 | 2026-05-15 | Natural Earth projection | Standard editorial choice; balanced area/shape |
 | 2026-05-15 | SSR land + island markers | Fast first paint, minimal JS |
+| 2026-09-18 | Normalize every photo to 1600×1205 / Q85, GPS stripped | Uniform CSS crop across tooltips; no venue coordinates in EXIF |
 
 ---
 
-**Version**: 0.1
+**Version**: 0.2
 **Authors**: hato.GNSS
 **Status notes**: Implementation planned for hatognss.dev v0.1 launch (target weekend 2026-05-16/17).

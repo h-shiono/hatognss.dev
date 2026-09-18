@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/layout/PageHeader.astro';
+
+const notes = (await getCollection('fieldnotes', (e) => !e.data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const yearOf = (d: Date) => d.getUTCFullYear();
+// Frontmatter dates are date-only, so they parse as midnight UTC (L-S05).
+// Format them in UTC too, or a build host west of Greenwich renders a note
+// one day early while yearOf() still groups it under the UTC year.
+const monthDayFmt = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: '2-digit',
+  timeZone: 'UTC',
+});
+
+const years = Array.from(new Set(notes.map((n) => yearOf(n.data.date)))).sort(
+  (a, b) => b - a,
+);
+---
+<BaseLayout
+  title="Field Notes"
+  description="Short notes and half-formed ideas — a surveyor's field book, kept in the open."
+>
+  <PageHeader
+    title="Field Notes"
+    description="Rough notes, kept in the open. Ideas before they are finished, observations worth keeping. Longer technical writing lives on the blog."
+  />
+
+  {notes.length === 0 ? (
+    <p class="empty">No notes yet.</p>
+  ) : (
+    years.map((year) => (
+      <section class="year">
+        <h2 class="year-heading"><span class="year-num">{year}</span></h2>
+        <ul class="note-list">
+          {notes.filter((n) => yearOf(n.data.date) === year).map((n) => (
+            <li class="note">
+              <a
+                href={`/fieldnotes/${n.slug}/`}
+                class="note-row"
+                lang={n.data.language}
+              >
+                <span class="note-date">{monthDayFmt.format(n.data.date)}</span>
+                <span class="note-body">
+                  <span class="note-title">{n.data.title}</span>
+                  {n.data.summary && (
+                    <span class="note-summary">{n.data.summary}</span>
+                  )}
+                </span>
+                <span class="note-lang">{n.data.language.toUpperCase()}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  )}
+</BaseLayout>
+
+<style>
+  .empty {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    color: var(--color-text-tertiary);
+    margin: 2rem 0;
+  }
+
+  .year {
+    margin: 3rem 0;
+  }
+  .year-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 1.75rem 0;
+  }
+  .year-num {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.10em;
+    color: var(--color-text-primary);
+  }
+  .year-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  .note-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .note {
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .note-row {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: baseline;
+    /* Tighter than the blog list: notes are short, and the denser rhythm is
+     * what makes a running notebook read like one. */
+    padding: 11px 8px 11px 0;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.15s ease-out, padding-left 0.15s ease-out;
+  }
+  .note-row:hover {
+    background: var(--color-row-hover);
+    padding-left: 10px;
+    text-decoration: none;
+  }
+  .note-date {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+  }
+  .note-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+  .note-title {
+    font-size: 15.5px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--color-text-heading);
+    text-wrap: pretty;
+  }
+  .note-row[lang='ja'] .note-title {
+    line-height: 1.6;
+  }
+  .note-summary {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    text-wrap: pretty;
+  }
+  .note-lang {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent-border);
+    border-radius: 3px;
+    padding: 2px 7px;
+    line-height: 1.4;
+  }
+  @media (max-width: 640px) {
+    .note-row {
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+  }
+</style>

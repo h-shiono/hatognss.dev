@@ -213,9 +213,41 @@ Unified collection for OSS, Works, and Hobby projects, discriminated by `categor
 
 **Byline convention**: Blog posts are signed as **hato.GNSS**. Do not add a real-name byline unless the user explicitly requests one for a specific post.
 
+### `fieldnotes` collection
+
+```ts
+{
+  title: string,
+  date: Date,
+  updatedDate?: Date,
+  summary?: string,               // optional — a note may ship without one
+  tags: string[],
+  draft?: boolean,
+  language: 'ja' | 'en'
+}
+```
+
+**Scope**: `fieldnotes` (野帳) is the scratch surface — half-formed ideas, observations, notes-to-self. `blog` is reserved for finished technical writing. The split is editorial, not topical: the same subject may appear as a rough note first and a blog post later.
+
+The schema is deliberately lighter than `blog`. `summary` is optional and there is no `featured` field, because a note is never promoted to the homepage.
+
+**Routing and surfaces:**
+- Route: `/fieldnotes/` (index) and `/fieldnotes/<slug>/` (detail)
+- Page heading: `Field Notes`. English only — every `PageHeader` H1 on the site is English alone; the `en · ja` pairing belongs to `SectionLabel`, which labels sections *within* a page
+- Entry point: **footer only** — not in `NAV`, not on the homepage
+- **Not** in `/rss.xml` — that feed stays scoped to `blog`
+- **Not** in `/log/` — that page stays scoped to finished work (talks, publications, OSS, blog posts)
+- Indexed by site search when Pagefind is introduced (no `data-pagefind-ignore`)
+
+Filename pattern: `YYYY-MM-DD-slug.mdx` — day-level, where `blog` is month-level, because notes cluster within a month. Use `.mdx`, not `.md`: the detail page passes `components={{ table: TableWrap }}` to `<Content />`, and that prop is honoured by MDX only. A `.md` note would silently bypass the keyboard-reachable table wrapper.
+
+The slug is the filename, so a note's permalink carries its date: `/fieldnotes/2026-09-08-slug/`. This matches `blog` (`/blog/2026-05-ipntj-reflection/`).
+
+**Byline convention**: same as `blog` — signed as **hato.GNSS**.
+
 ## 6. Adding New Content — Workflow
 
-When the user asks to add a publication, talk, project, or blog post:
+When the user asks to add a publication, talk, project, blog post, or field note:
 
 1. **Check `CLAUDE.local.md` first** if the content involves biography, affiliations, project origins, or identity references.
 2. **Read the existing files in that collection** to match conventions (filename pattern, frontmatter shape, prose style).
@@ -223,7 +255,8 @@ When the user asks to add a publication, talk, project, or blog post:
    - Publications: `YYYY-short-slug.md` (e.g., `2025-navigating-the-storm.md`)
    - Talks: `YYYY-MM-event-slug.md` (e.g., `2026-05-ipntj-mrtklib.md`)
    - Projects: `slug.md` (e.g., `mrtklib.md`)
-   - Blog: `YYYY-MM-DD-slug.md`
+   - Blog: `YYYY-MM-slug.mdx` (e.g., `2026-05-ipntj-reflection.mdx`)
+   - Field notes: `YYYY-MM-DD-slug.mdx` (day-level — notes cluster within a month)
 4. **Fill ALL required frontmatter fields.** Do not guess values. Ask for unknowns.
 5. **Run a typecheck** (`pnpm astro check`) before declaring done.
 6. **For featured items**, confirm with the user — featured content appears on the homepage and competes for attention.
@@ -355,5 +388,5 @@ This `CLAUDE.md` is itself a tracked artifact. Update version and date at the bo
 
 ---
 
-**Version**: 0.8 (added `doi` field to projects schema for citable software; documented DOI link rendering and order)
-**Last updated**: 2026-07-08
+**Version**: 0.10 (brought §6 in scope with the `fieldnotes` collection added in 0.9)
+**Last updated**: 2026-09-18

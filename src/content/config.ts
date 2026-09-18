@@ -113,4 +113,24 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { publications, talks, projects, blog };
+/*
+ * Field notes (野帳) — short, low-ceremony jottings: half-formed ideas,
+ * observations, things worth remembering. Deliberately lighter than `blog`:
+ * `summary` is optional so a note never has to be packaged before it is
+ * written. Not carried in /rss.xml and not folded into /log — those surfaces
+ * stay scoped to finished work.
+ */
+const fieldnotes = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.date(),
+    updatedDate: z.date().optional(),
+    summary: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+    language: z.enum(['ja', 'en']),
+  }),
+});
+
+export const collections = { publications, talks, projects, blog, fieldnotes };

@@ -27,6 +27,7 @@ src/
     talks/
     projects/     # OSS + Works + Hobby, discriminated by `category`
     blog/
+    fieldnotes/   # 野帳 — rough notes, footer-only entry point
   layouts/
   lib/            # utils.ts, constants.ts
   pages/          # Routes
@@ -41,9 +42,10 @@ Schemas live in [`src/content/config.ts`](src/content/config.ts). Adding content
 | Type | Location | Filename pattern |
 |---|---|---|
 | Publication | `src/content/publications/` | `YYYY-short-slug.md` |
-| Talk | `src/content/talks/` | `YYYY-MM-event-slug.md` |
+| Talk | `src/content/talks/` | `YYYY-MM-event-slug/index.md` (assets collocated) |
 | Project (OSS / Work / Hobby) | `src/content/projects/` | `slug.md` |
-| Blog post | `src/content/blog/` | `YYYY-MM-DD-slug.md` |
+| Blog post | `src/content/blog/` | `YYYY-MM-slug.mdx` |
+| Field note | `src/content/fieldnotes/` | `YYYY-MM-DD-slug.mdx` |
 
 Run `pnpm astro check` before committing.
 
