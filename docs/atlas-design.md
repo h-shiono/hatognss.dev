@@ -76,7 +76,7 @@ Astro Content Collections natively support this layout when the collection entry
 
 | Property | Requirement |
 |---|---|
-| Aspect ratio | Any. Landscape is easiest; portrait sources are cropped during normalization (§5.3) |
+| Aspect ratio | Any. Anything other than 1.328:1 is cropped to it during normalization (§5.3) |
 | Resolution | Long edge ≥ 1600px **after** any crop |
 | Format | JPEG, sRGB. No Adobe RGB or wide-gamut |
 | File size | Unconstrained — the normalized asset is what enters the repo |
@@ -100,15 +100,26 @@ Every photo shares one aspect ratio so the tooltip's CSS crop (§5.4) behaves id
 
 Run before committing a new photo. ImageMagick and exiftool, both from Homebrew.
 
+One rule, whatever the source shape: **crop to 1.328:1, then resize to 1600 wide**,
+both in a single invocation so the file is encoded once rather than twice. Compute the
+crop box from the source dimensions:
+
+| Source | Crop box |
+|---|---|
+| Already 1.328:1 (4080×3072 straight off the phone) | none — drop `-crop` |
+| Taller than 1.328:1 (portrait, 3:2, 16:9 turned) | `crop_h = round(source_w ÷ 1.328125)` |
+| Wider than 1.328:1 (16:9, panorama) | `crop_w = round(source_h × 1.328125)` |
+
+Only the offset is a judgement call; the box size is arithmetic.
+
 ```bash
-# Landscape source (4080×3072 or similar) — resize only.
+# Source already at 1.328:1 — resize only.
 magick photo-original.jpg \
   -resize 1600x -quality 85 -sampling-factor 2x2,1x1,1x1 \
   photo.jpg
 
-# Portrait source — crop to 1.328:1 first, in the same invocation
-# (one JPEG encode, not two). Height = round(width / 1.328125);
-# for a 3072-wide source that is 2313. Pick the Y offset by eye.
+# Anything else — crop first. A 3072×4080 portrait gives crop_h = 2313;
+# +0+620 is the offset chosen for the ION GNSS+ 2026 photo.
 magick photo-original.jpg \
   -crop 3072x2313+0+620 +repage \
   -resize 1600x -quality 85 -sampling-factor 2x2,1x1,1x1 \
@@ -128,7 +139,7 @@ exiftool -GPS:all -s photo.jpg                                # no output
 **Do not use `sips`.** It drops the ICC profile and the XMP block, and rounds the short
 edge to 1204 instead of 1205 — the asset ends up visibly off-standard in metadata terms.
 
-**Choosing the Y offset for a portrait source.** The tooltip re-crops the stored asset to
+**Choosing the crop offset.** The tooltip re-crops the stored asset to
 1.692:1 (§5.4), taking the centre band and discarding roughly 249px from the top and
 bottom of a 2313px crop. Frame for *that* band, not for the stored 1600×1205. Simulate it
 before committing:

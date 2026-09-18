@@ -247,7 +247,7 @@ The slug is the filename, so a note's permalink carries its date: `/fieldnotes/2
 
 ## 6. Adding New Content — Workflow
 
-When the user asks to add a publication, talk, project, or blog post:
+When the user asks to add a publication, talk, project, blog post, or field note:
 
 1. **Check `CLAUDE.local.md` first** if the content involves biography, affiliations, project origins, or identity references.
 2. **Read the existing files in that collection** to match conventions (filename pattern, frontmatter shape, prose style).
@@ -388,5 +388,5 @@ This `CLAUDE.md` is itself a tracked artifact. Update version and date at the bo
 
 ---
 
-**Version**: 0.9 (added `fieldnotes` collection — the 野帳 scratch surface — with its routing, surface exclusions, and filename convention)
-**Last updated**: 2026-09-08
+**Version**: 0.10 (brought §6 in scope with the `fieldnotes` collection added in 0.9)
+**Last updated**: 2026-09-18
