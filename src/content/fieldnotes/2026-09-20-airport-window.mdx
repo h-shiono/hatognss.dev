@@ -1,0 +1,39 @@
+---
+title: 空港内窓際での GNSS 受信
+date: 2026-09-20
+summary: 低 C/N0 ながら受信に成功
+tags: ['RFI']
+draft: false
+language: 'ja'
+---
+
+ION GNSS+ 2026 を終え帰国の途についています。
+モントリオールでの乗り換え待ちで時間があったので、空港内窓際で GNSS 受信が可能かを Pixel 8 Pro を使ってテストしました。
+結果としてかなり C/N0 が低い（Avg. Cn0 Used in Fix: 23, Avg. Cn0 Used in View: 15）ものの受信に成功しました。
+
+実は数ヶ月前にイスタンブール空港で同じことを試みた時には全く受信できませんでした。
+Claude 曰く、現代の大規模ターミナルでは巨大なガラス窓の熱負荷を下げるために低放射コーティング＝金属薄膜の蒸着層がほぼ標準仕様となっているらしく、これが C/N0 減衰の原因になっていそうです。
+
+Architecture Today, [Istanbul Airport](https://architecturetoday.co.uk/istanbul-airport-sisecam/)
+
+> Şişecam Temperable, Solar Low-E coated glass products provide both solar control and thermal insulation in a single layer.
+> They can significantly reduce HVAC loads by minimising heat loss in the winter and solar heat gain in the summer.
+> Their optimal light transmittance reduces the need for artificial lighting, supporting the airport’s energy-efficiency goals.
+> Meanwhile, the temperability of the glass ensures safety without compromising transparency.
+
+Resolution Wireless, [How Low-E Glass Cripples In-Building Cellular Signals](https://www.resolutionwireless.com/low-e-glass-cripples-building-cellular-signals/)
+
+> Signal loss, or attenuation, is measured in decibels (dB).
+> Because the dB scale is logarithmic, even a small numerical change represents a significant drop in signal strength.
+> While standard, untreated glass causes minimal signal loss, tinted and Low-E glass can cause a signal loss between -24 dB and -40 dB, which can be up to 10 times more signal blocking than clear glass.
+
+ざっと調べた感じでは L 帯そのものの減衰量は分かりませんでしたが、Low-E ガラスによる減衰という説明で概ね整合していそうです。
+
+---
+
+想起されるのは LEO-PNT の強みの一つとして信号強度が高いから屋内でも測位できるんだ、という主張です。
+LEO-PNT であれば Low-E ガラスでも受信可能なレベルの信号を出せるかもしれません。
+実際には Low-E ガラスによる減衰を相殺しきれない可能性もあります。
+
+そもそも窓があって、屋根があって、壁があってといった環境で信号が届いて、どの程度信用に足る位置が出せるのかなといつも思います。
+状況としては都市部での測位に近い（それより悪い）ので、強い信号が受けられてもなお、相当工夫しないと使える位置は出ない気がしています。
