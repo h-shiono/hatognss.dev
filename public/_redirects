@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects. Keep every URL that has ever been published.
+# See docs/published-urls.md.
+/research/publications/2025-navigating-the-storm/  /research/publications/2026-04-navigating-the-storm/  301
+/research/publications/2025-navigating-the-storm   /research/publications/2026-04-navigating-the-storm/  301
+/research/publications/2026-iasb-integrity/        /research/publications/2026-06-iasb-integrity/        301
+/research/publications/2026-iasb-integrity         /research/publications/2026-06-iasb-integrity/        301

@@ -1,6 +1,6 @@
 ---
 title: "Inter-augmentation SIS bias (IASB): a novel integrity monitor for QZSS CLAS PPP-RTK"
-authors: ["H.Shiono", "N.Kubo"]
+authors: ["H. Shiono", "N. Kubo"]
 venue: "GPS Solutions"
 year: 2026
 type: journal
