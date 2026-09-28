@@ -252,7 +252,7 @@ When the user asks to add a publication, talk, project, blog post, or field note
 1. **Check `CLAUDE.local.md` first** if the content involves biography, affiliations, project origins, or identity references.
 2. **Read the existing files in that collection** to match conventions (filename pattern, frontmatter shape, prose style).
 3. **Create a new file** under the correct collection with kebab-case filename:
-   - Publications: `YYYY-short-slug.md` (e.g., `2025-navigating-the-storm.md`)
+   - Publications: `YYYY-MM-short-slug.md` (e.g., `2026-04-navigating-the-storm.md`) — month from the `date` field
    - Talks: `YYYY-MM-event-slug.md` (e.g., `2026-05-ipntj-mrtklib.md`)
    - Projects: `slug.md` (e.g., `mrtklib.md`)
    - Blog: `YYYY-MM-slug.mdx` (e.g., `2026-05-ipntj-reflection.mdx`)
@@ -388,5 +388,5 @@ This `CLAUDE.md` is itself a tracked artifact. Update version and date at the bo
 
 ---
 
-**Version**: 0.10 (brought §6 in scope with the `fieldnotes` collection added in 0.9)
-**Last updated**: 2026-09-18
+**Version**: 0.11 (publication filenames moved to `YYYY-MM-short-slug`)
+**Last updated**: 2026-09-28
