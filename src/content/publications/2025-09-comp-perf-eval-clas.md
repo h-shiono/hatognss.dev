@@ -1,9 +1,11 @@
 ---
 title: "Comprehensive Performance Evaluation of QZSS CLAS Over Four Years (2021-2024) Spanning the Solar Maximum"
-event: "ION GNSS+ 2025"
-date: 2025-09-09
-location: "Baltimore, US"
-type: oral
+authors: ["Hayato Shiono", "Nobuaki Kubo"]
+venue: "ION GNSS+ 2025"
+year: 2025
+type: conference
+status: published
+doi: "10.33012/2025.20341"
 abstract: |
     The Quasi-Zenith Satellite System (QZSS) Centimeter Level Augmentation Service (CLAS) is the world’s first satellite-based open service for PPP-RTK.
     While its nominal performance is well-documented, a comprehensive, multi-year evaluation during a period of high solar activity is essential for fully understanding its capabilities and limitations under challenging ionospheric conditions.
@@ -20,11 +22,9 @@ abstract: |
     This evidence-based characterization provides valuable insights for both end-users in setting realistic performance expectations and for the service provider in identifying areas for future algorithmic and system improvements.
 tags: ["QZSS", "CLAS", "Ionosphere", "Vulnerability"]
 url: "https://www.ion.org/publications/abstract.cfm?articleID=20341"
-related_publication: "2025-09-comp-perf-eval-clas"
+presented_at: "2025-09-iongnss-baltimore"
 featured: false
-lat: 39.2904
-lng: -76.6122
-thumbnail: ./photo.jpg
+date: 2025-09-09
 ---
 
 <!-- Body content. Fill in or replace. -->

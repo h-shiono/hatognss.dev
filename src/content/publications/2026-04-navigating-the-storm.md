@@ -15,6 +15,7 @@ abstract: |
 tags: ["QZSS", "CLAS", "Ionosphere", "Vulnerability"]
 url: "https://navi.ion.org/content/73/1/navi.762"
 presented_at: "2025-09-iongnss-baltimore"
+notes: "Extended journal version of the ION GNSS+ 2025 conference paper."
 featured: false
 date: 2026-04-25
 ---

@@ -1,9 +1,12 @@
 ---
 title: "Stealth Spoofing of the CSSR Open Standard: A First Demonstration with QZSS CLAS"
-event: "Pacific PNT 2026"
-date: 2026-04-15
-location: "Waikiki, US"
-type: oral
+authors: ["Hayato Shiono", "Nobuaki Kubo"]
+venue: "Pacific PNT 2026"
+year: 2026
+type: conference
+status: published
+pages: "pp. 772-785"
+doi: "10.33012/2026.20610"
 abstract: |
     High-precision GNSS services utilizing the Compact State Space Representation (CSSR) format, such as QZSS CLAS, have become a de facto standard for scalable augmentation.
     However, the openness of these correction streams introduces significant security vulnerabilities.
@@ -14,11 +17,15 @@ abstract: |
     We conclude that algorithmic defenses alone are insufficient, underscoring the necessity of cryptographic countermeasures such as Navigation Message Authentication (NMA) to secure the open high-precision GNSS ecosystem.
 tags: ["QZSS", "CLAS", "Spoofing", "Vulnerability"]
 url: "https://www.ion.org/publications/abstract.cfm?articleID=20610"
-related_publication: "2026-04-stealth-spoofing-cssr"
+presented_at: "2026-04-pacificpnt-waikiki"
 featured: false
-lat: 21.2766
-lng: -157.8267
-thumbnail: ./photo.jpg
+date: 2026-04-15
+awards:
+  - name: "Student Paper Award"
+    venue: "Pacific PNT 2026"
+    year: 2026
+    type: paper
+    url: https://www.kaiyodai.ac.jp/en/faculty/graduate/news/detail/pacific_pnt2026.html
 ---
 
 <!-- Body content. Fill in or replace. -->
