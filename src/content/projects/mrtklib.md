@@ -44,6 +44,8 @@ Choose by how you want to use it.
 
 ## In use · 使用実績
 
+- **2026-11: トランジスタ技術 2026年11月号 特設「みちびき7機体制時代の衛星測位」第2章**
+  Machimura-san ran MRTKLIB on a Raspberry Pi with a mosaic-G5 P6 receiver. Three positioning modes run at the same time, including CLAS and MADOCA-PPP. ([magazine](https://toragi.cqpub.co.jp/magazine/202611/))
 - **2026-09-03: IPNTJ International GNSS Summer School 2026 (Day 4, Receiver Practice)**
   Septentrio used MRTKLIB and mrtklib-docker-ui for the real-time MADOCA-PPP exercise. ([report](/blog/2026-09-ipntj-summer-school/))
 - **[CLAS Summary Dashboard](/works/clas-dashboard/)**
@@ -51,6 +53,7 @@ Choose by how you want to use it.
 
 ## Papers · 論文
 
+- [MRTKLIB ・ MRTKLIB GUIの紹介](/research/publications/2026-11-toragi/) — Magazine, トランジスタ技術 2026年11月号, JA. Chapters 4 and 5: an overview with CLAS and MADOCA-PPP comparisons, and real-time positioning with the GUI on Windows.
 - [Blind, Laser-Validated Environment Estimation for Crowdsourced GNSS Reference Stations](/research/talks/2026-09-iongnss-orlando/) — Talk, ION GNSS+ 2026, EN. Proceedings forthcoming. The first paper to use MRTKLIB.
 
 ## Related · 関連
