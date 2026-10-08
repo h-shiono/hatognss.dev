@@ -12,7 +12,7 @@ export const SOCIAL = {
   zenn: 'https://zenn.dev/hatognss',
   x: 'https://x.com/HatoGnss',
   researchgate: '',
-  email: '',
+  email: 'contact@hatognss.dev',
 } as const;
 
 export const NAV: ReadonlyArray<{ href: string; label: string }> = [
