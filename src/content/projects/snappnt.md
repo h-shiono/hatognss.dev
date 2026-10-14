@@ -13,5 +13,8 @@ startDate: 2026-10-05
 
 ## In the media · 掲載
 
+- **2026-10-13: CIRCUIT DIGEST** — [This ESP32-C5 Picks Up India’s NavIC Satellite Signal Using Its Built-In 2.4 GHz Radio, in Early Test](https://circuitdigest.com/news/this-esp32-c5-picks-up-indias-navic-satellite-signal-using-its-built-in-2-4-ghz-radio-in-early-test)
+  A news article on the early NavIC S-band reception test. EN.
+  Also picked up by the [Adafruit Blog](https://blog.adafruit.com/2026/10/13/this-esp32-c5-picks-up-indias-navic-satellite-signal-using-its-built-in-2-4-ghz-radio-in-early-test/).
 - **2026-10-07: FabScene** — [研究者がESP32-C5で測位衛星の信号を受信、45cmの衛星放送用アンテナで](https://fabscene.com/new/make/snappnt-esp32-c5-navic-s-band-satellite-signal-reception-esp-sdr/)
   An article on NavIC S-band reception with an ESP32-C5 and a 45 cm satellite TV dish. JA.
