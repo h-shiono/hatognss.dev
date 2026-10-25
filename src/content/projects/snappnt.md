@@ -13,6 +13,8 @@ startDate: 2026-10-05
 
 ## In the media · 掲載
 
+- **2026-10-21: KThinker Lab** — [ESP32-C5 bắt được tín hiệu vệ tinh NavIC: đọc số liệu thế nào cho đúng?](https://kthinkerlab.com/blog/esp32-c5-bat-tin-hieu-vi-tinh-navic-doc-so-lieu-dung-cach)
+  A close reading of the preliminary results. It rechecks the numbers and separates what the test shows from what it does not yet show. VI.
 - **2026-10-13: CIRCUIT DIGEST** — [This ESP32-C5 Picks Up India’s NavIC Satellite Signal Using Its Built-In 2.4 GHz Radio, in Early Test](https://circuitdigest.com/news/this-esp32-c5-picks-up-indias-navic-satellite-signal-using-its-built-in-2-4-ghz-radio-in-early-test)
   A news article on the early NavIC S-band reception test. EN.
   Also picked up by the [Adafruit Blog](https://blog.adafruit.com/2026/10/13/this-esp32-c5-picks-up-indias-navic-satellite-signal-using-its-built-in-2-4-ghz-radio-in-early-test/).
