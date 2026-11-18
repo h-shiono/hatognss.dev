@@ -44,6 +44,8 @@ Choose by how you want to use it.
 
 ## In use · 使用実績
 
+- **2026-11-03: AITOYA — mosaic-G5 P6 HAT (iChidori-Crest) guide**
+  AITOYA's guide for this Raspberry Pi HAT uses MRTKLIB as the positioning engine. It covers CLAS and MADOCA-PPP. ([guide](https://www.aitoya.com/contents/cont009-001.html))
 - **2026-11: トランジスタ技術 2026年11月号 特設「みちびき7機体制時代の衛星測位」第2章**
   Machimura-san ran MRTKLIB on a Raspberry Pi with a mosaic-G5 P6 receiver. Three positioning modes run at the same time, including CLAS and MADOCA-PPP. ([magazine](https://toragi.cqpub.co.jp/magazine/202611/))
 - **2026-09-03: IPNTJ International GNSS Summer School 2026 (Day 4, Receiver Practice)**
