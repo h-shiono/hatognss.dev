@@ -1,0 +1,50 @@
+---
+/*
+ * /oss/mrtklib/support/ — how MRTKLIB is supported and how support is disclosed.
+ * Linked from each repo's FUNDING.yml, so the URL must stay stable
+ * (docs/published-urls.md). The body lives in ./_support.mdx.
+ */
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+import TableWrap from '../../../components/ui/TableWrap.astro';
+import { Content } from './_support.mdx';
+import { formatDate } from '../../../lib/utils';
+
+const LAST_UPDATED = new Date('2026-11-24');
+const description =
+  'How to support MRTKLIB and its related projects, and how support is disclosed.';
+---
+<ArticleLayout title="Supporting MRTKLIB" description={description}>
+  <a class="back-link" href="/oss/mrtklib/">← MRTKLIB</a>
+  <h1>Supporting MRTKLIB</h1>
+  <Content components={{ table: TableWrap }} />
+  <p class="updated">
+    Last updated <time datetime={LAST_UPDATED.toISOString()}>{formatDate(LAST_UPDATED)}</time>
+  </p>
+</ArticleLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.75rem;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease-out;
+  }
+  .back-link:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .updated {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+  }
+</style>

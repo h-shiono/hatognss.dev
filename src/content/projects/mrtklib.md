@@ -64,6 +64,11 @@ Choose by how you want to use it.
 - [IPNTJ 2026 全国大会で MRTKLIB について講演しました](/blog/2026-05-ipntj-reflection/) — Blog, 2026-05, JA
 - [L6対応受信機を CLAS 測位対応にする — MRTKLIB v0.6.5 と小型端末レシピ](https://zenn.dev/hatognss/articles/3c102a051af51d) — Zenn, 2026-03, JA
 
+## Support · 支援
+
+To support the projects, see [Supporting MRTKLIB](/oss/mrtklib/support/).
+It also explains how equipment and funding are disclosed.
+
 ## Citation · 引用
 
 To cite MRTKLIB, use the DOI above.
