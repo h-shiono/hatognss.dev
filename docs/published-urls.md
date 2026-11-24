@@ -16,4 +16,4 @@ URLs that external files point at directly. Do not move them without a 301.
 
 | URL | Linked from | Since |
 |---|---|---|
-| `/oss/mrtklib/support/` | FUNDING.yml (`custom`) of MRTKLIB, mrtklib-docker-ui, mrtklib-quickstart | planned (set the date when FUNDING.yml is pushed) |
+| `/oss/mrtklib/support/` | FUNDING.yml (`custom`) of MRTKLIB, mrtklib-docker-ui, mrtklib-quickstart | 2026-11-24 |
